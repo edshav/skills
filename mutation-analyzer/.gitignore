@@ -1,0 +1,21 @@
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Editor / IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Python (if you run evals locally)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Eval / workspace artifacts created when running the skill-creator harness
+mutation-analyzer-workspace/
+*.skill

@@ -1,0 +1,6 @@
+# Created by create-issues.js at runtime
+.create_issues_state.json
+create_issues.log
+
+# Node
+node_modules/

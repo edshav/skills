@@ -1,0 +1,13 @@
+{
+  "name": "generate-tasks-json",
+  "version": "1.0.0",
+  "description": "Bulk GitHub issue creator with planning discipline (contract-as-seam decomposition).",
+  "type": "module",
+  "bin": {
+    "create-issues": "./create-issues.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}

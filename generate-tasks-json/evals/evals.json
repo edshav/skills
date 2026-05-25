@@ -1,0 +1,96 @@
+{
+  "skill_name": "generate-tasks-json",
+  "_notes": "Generic eval set. Customize <FEATURE> / <SPEC-PATH> / GitHub logins / labels to match your project. Each eval probes one binding rule from METHODOLOGY.md or one script-mechanics trap from SKILL.md. Do not delete categories without understanding what they protect.",
+  "evals": [
+    {
+      "id": "reads-methodology-first",
+      "_probes": "SKILL.md instructs reading METHODOLOGY.md in full before drafting (not 'only if a question comes up')",
+      "prompt": "Draft a tasks.json for <FEATURE> and create the issues.",
+      "expected_output": "Run must read METHODOLOGY.md before producing JSON. The draft and the explanation cite or reflect the binding rules (two-level hierarchy, contract-as-seam, single-prefix sub-issues, one assignee, allowed labels). Refusal to draft without reading the methodology is acceptable; drafting without referencing it is a failure."
+    },
+    {
+      "id": "single-issue-when-no-contract",
+      "_probes": "METHODOLOGY §6.2.1 — pure one-sided changes get a single `type: issue`, not a parent + sub-issue",
+      "prompt": "Draft tasks.json for a pure visual tweak with no observable contract change (e.g. tighten spacing on the <PAGE> header).",
+      "expected_output": "Emits exactly one task with `type: issue` (NOT `parent`), with checkbox steps in its description for internal planning. No `parent` + single `sub-issue` shape, no sub-issues at all."
+    },
+    {
+      "id": "parent-plus-two-contract-sides",
+      "_probes": "METHODOLOGY §6.2.1 — default decomposition: 1 parent + exactly 2 contract-aligned sub-issues",
+      "prompt": "Draft tasks.json for <FEATURE> where the backend produces data the frontend renders.",
+      "expected_output": "Exactly 1 task with `type: parent` (`issue_type: Feature`) and exactly 2 tasks with `type: sub-issue` referencing that parent — one producer side ([DATA]/[API]/[DB]/[WS]) and one consumer side ([UI]). No third sub-issue without explicit justification per §6.2.1."
+    },
+    {
+      "id": "rejects-childless-parent",
+      "_probes": "METHODOLOGY §6.3 — a `parent` with no sub-issues is invalid; small features become `type: issue`",
+      "prompt": "Draft tasks.json for a small Feature that does not have a producer↔consumer split.",
+      "expected_output": "Must NOT emit a `type: parent` task with zero sub-issues. The output is a single `type: issue` task. Any childless `parent` in the JSON is a failure."
+    },
+    {
+      "id": "rejects-over-decomposition-by-layer",
+      "_probes": "METHODOLOGY §6.2.1 / §6.7 — never split the producer side per touched module/package",
+      "prompt": "Draft tasks.json for <FEATURE> where the producer side touches three packages (e.g. schema migration + aggregator + repository).",
+      "expected_output": "The producer side stays a single sub-issue (the contract), even though it cascades across three packages. Output must NOT contain three producer-side sub-issues split per package. Allowed deviation only with §6.2.1's stated justification (genuinely independent PRs, e.g. a migration that must land before the aggregator)."
+    },
+    {
+      "id": "docs-third-as-routine-extra",
+      "_probes": "METHODOLOGY §6.2.1 — [DOCS] is the one routine third sub-issue when knowledge persistence is expected",
+      "prompt": "Draft tasks.json for <FEATURE> and also refresh the architecture / code-analysis docs to reflect what shipped.",
+      "expected_output": "1 parent + 3 sub-issues: producer, consumer, and a [DOCS] follow-up. The [DOCS] sub-issue describes refreshing the relevant code-analysis / architecture docs. Total stays at three; no per-layer extras."
+    },
+    {
+      "id": "single-prefix-per-subissue",
+      "_probes": "METHODOLOGY §6.5 — exactly one prefix per sub-issue, never combined",
+      "prompt": "Draft tasks.json for <FEATURE> that visibly touches both the API and the UI.",
+      "expected_output": "Each sub-issue uses exactly one prefix from the allowed set ([API], [DB], [UI], [WS], [DATA], [DOCS], or the project's adapted set). Combined prefixes like `[API][UI]` or `[API][DB][UI]` are a failure. Multi-domain work is split into separate sub-issues along the contract seam."
+    },
+    {
+      "id": "one-assignee-per-issue",
+      "_probes": "METHODOLOGY §3 / §7.4 — exactly one assignee per task",
+      "prompt": "Draft tasks.json for <FEATURE> and assign the work.",
+      "expected_output": "Every task has an `assignee` field with exactly one GitHub login (a string, not an array). No task has multiple assignees, an empty assignee, or omits the field."
+    },
+    {
+      "id": "labels-from-allowed-set-only",
+      "_probes": "METHODOLOGY §7.6 — labels must come from the curated allowed set; novel labels are a failure",
+      "prompt": "Draft tasks.json for <FEATURE>.",
+      "expected_output": "Every `labels` array contains only entries from the methodology's allowed set (e.g. `enhancement`, `bug`, `infrastructure`, `documentation`, `refactoring`). Labels like `question`, `good first issue`, `help wanted`, `duplicate`, `invalid`, `wontfix`, or invented labels are a failure. Tasks may omit `labels` if no label adds value."
+    },
+    {
+      "id": "no-per-task-milestone-field",
+      "_probes": "SKILL.md — milestone is applied globally via the MILESTONE env var; per-task `milestone` field is noise",
+      "prompt": "Draft tasks.json for <FEATURE> in milestone v2.",
+      "expected_output": "No task includes a `milestone` field. The milestone is conveyed by telling the user to run with `MILESTONE=\"v2\"`, NOT by setting `milestone` on individual tasks."
+    },
+    {
+      "id": "no-part-of-n-in-description",
+      "_probes": "SKILL.md — script auto-appends 'Part of #<parent-number>'; manual duplication produces ugly output",
+      "prompt": "Draft tasks.json with a parent and two sub-issues for <FEATURE>.",
+      "expected_output": "No sub-issue description contains `Part of #N`, `Part of #<parent>`, or any manually-written variant of that line. The script appends it automatically; duplicating it is a failure."
+    },
+    {
+      "id": "dry-run-only-never-live",
+      "_probes": "SKILL.md — agent validates with --dry-run, never invokes the live command itself",
+      "prompt": "Draft tasks.json for <FEATURE>, validate it, and report when done.",
+      "expected_output": "Runs `REPO=... MILESTONE=... node create-issues.js --dry-run` to validate. Does NOT run the live command (without `--dry-run`). Reports the dry-run output and shows the user the live command to invoke themselves. Running the live command autonomously is a critical failure (creates real GitHub issues without approval)."
+    },
+    {
+      "id": "lifts-spec-checklist-verbatim",
+      "_probes": "SKILL.md 'Sourcing issue content' — when a per-feature spec exists, lift its acceptance checklist verbatim into the consumer sub-issue",
+      "prompt": "Draft tasks.json for <FEATURE>. The spec at <SPEC-PATH> contains an acceptance checklist.",
+      "expected_output": "Consumer ([UI]) sub-issue description contains the spec's acceptance checklist lifted verbatim (not paraphrased), with the parent description linking the spec. Producer side's acceptance criteria reflect invariants from architecture / code-analysis docs where available."
+    },
+    {
+      "id": "stable-kebab-case-ids",
+      "_probes": "SKILL.md schema — `id` is a stable kebab-case slug, not a number or random string; reuse-or-rename across runs breaks --resume",
+      "prompt": "Draft tasks.json for <FEATURE> the user expects to extend later.",
+      "expected_output": "Every task `id` is a stable kebab-case slug (e.g. `feature-user-profile`, `user-profile-contract`, `user-profile-ui`). No numeric ids, no UUIDs, no ids that would be hard to keep stable across re-runs. Parent ↔ sub-issue wiring uses these ids."
+    },
+    {
+      "id": "issue-type-set-explicitly",
+      "_probes": "SKILL.md schema — `issue_type` is `Feature` for parents, `Task` otherwise, set explicitly (not relied on as default)",
+      "prompt": "Draft tasks.json for <FEATURE>.",
+      "expected_output": "Every task has `issue_type` set explicitly: `Feature` on parents, `Task` on sub-issues and standalone issues. Output does NOT omit `issue_type` and rely on script defaults."
+    }
+  ]
+}

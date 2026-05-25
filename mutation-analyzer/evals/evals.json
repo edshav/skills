@@ -1,0 +1,96 @@
+{
+  "skill_name": "mutation-analyzer",
+  "_notes": "Generic eval set. Customize prompts and expected_output to reference real entities, modules, and files in your target codebase. Each eval probes one rule of the 5-mode state machine; do not delete categories without understanding what they protect.",
+  "evals": [
+    {
+      "id": "interview-flow-scoping",
+      "_probes": "Interview produces flow-focused questions, not struct definitions",
+      "prompt": "Start interview for: Trace how <ENTITY> flows from <UPSTREAM-SOURCE> to <DOWNSTREAM-RENDERING>.",
+      "expected_output": "5–12 targeted questions focused on data flow, transformations, and cross-layer dependencies. No generic architecture questions, no questions about exact struct fields without flow context."
+    },
+    {
+      "id": "explore-definition-and-usage",
+      "_probes": "Explore checklist items 1 and 2 (definition + ≥3 usage points)",
+      "prompt": "Explore: Where is <ENTITY> initially constructed and where is it consumed?",
+      "expected_output": "Code-grounded answer with explicit file paths. Must identify the source of truth AND at least three distinct usage points across different layers."
+    },
+    {
+      "id": "explore-transformation-and-serialization",
+      "_probes": "Explore checklist items 3 and 4 (≥2 transformations, ≥1 serialization boundary)",
+      "prompt": "Explore: How is <ENTITY> transformed between <LAYER-A> and <LAYER-B>, and where is it serialized to the database or API response?",
+      "expected_output": "Must identify at least two transformation points and at least one serialization boundary (DB column / API JSON shape). Each claim anchored to a file path."
+    },
+    {
+      "id": "explore-silent-vs-hard-failure",
+      "_probes": "Explore enumerates silent + hard failure sites before synthesis",
+      "prompt": "Explore: If <ENTITY>'s representation changes, where would the failure be silent vs loud?",
+      "expected_output": "Explicit enumeration of both failure modes. Silent failure: where wrong data renders without crashing. Hard failure: where a panic, type error, or HTTP 500 occurs. Anchored to code paths, not abstract."
+    },
+    {
+      "id": "explore-auto-chains-to-synthesize",
+      "_probes": "Auto-chaining rule: after a complete Explore, model proceeds into Synthesize without waiting for a trigger",
+      "prompt": "Explore: How does <ENTITY> flow from <DB-LAYER> to <CLIENT-LAYER>?",
+      "expected_output": "After the mandatory Explore checklist is satisfied, the run must automatically continue into Synthesize and write the wiki files in the same turn without the user issuing a separate Synthesize: trigger. Stopping is only acceptable if the checklist is INCOMPLETE or the user asked to explore only."
+    },
+    {
+      "id": "synthesize-strict-template",
+      "_probes": "10-section synthesis template is followed exactly",
+      "prompt": "Synthesize: Trace how <ENTITY> flows from <UPSTREAM> to <DOWNSTREAM>.",
+      "expected_output": "Structured markdown following all 10 sections of the template: Overview, End-to-End Data Flow, Per-Layer Breakdown, Cross-Layer Dependencies, Critical Constraints, Mutation Impact, Common Pitfalls, Evidence, Compact Knowledge, Export. No section skipped."
+    },
+    {
+      "id": "synthesize-writes-correct-path",
+      "_probes": "Synthesize writes under <WIKI>/code-analysis/<domain>/, not at wiki root",
+      "prompt": "Synthesize: Trace how <FEATURE-PAGE> renders from <DATA-SOURCE>.",
+      "expected_output": "Synthesis must write files under <WIKI>/code-analysis/<domain>/ (NOT <WIKI>/<domain>/). Section 10 export and reported paths must use the code-analysis/<domain>/ prefix, and the run must update <WIKI>/index.md."
+    },
+    {
+      "id": "synthesize-single-domain-patterns-impact",
+      "_probes": "Patterns and impact are created at synthesis time, single-domain is sufficient",
+      "prompt": "Synthesize: Trace <SPECIFIC-CALCULATION> from <UPSTREAM-SNAPSHOT> to <CLIENT-SIDE-USE>.",
+      "expected_output": "Must produce per-domain patterns.md and impact.md even though only one flow exists (single-domain creation is allowed). Must NOT defer patterns/impact creation to Consolidate or claim a 2+ flow requirement."
+    },
+    {
+      "id": "synthesize-multiple-impact-files",
+      "_probes": "Sub-area impact files for distinct blast radii",
+      "prompt": "Synthesize: Trace <PAGE-WITH-MULTIPLE-SUBAREAS> across its <SUBAREA-A>, <SUBAREA-B>, and <SUBAREA-C> sub-areas.",
+      "expected_output": "Must support multiple sub-area impact files (e.g. <subarea-a>.impact.md, <subarea-b>.impact.md, <subarea-c>.impact.md) under <WIKI>/code-analysis/<domain>/ when sub-areas have distinct blast radii, and update <WIKI>/index.md for each."
+    },
+    {
+      "id": "synthesize-links-constraints-file",
+      "_probes": "Synthesis cites the project constraints file by ID instead of re-deriving rules",
+      "prompt": "Synthesize: Trace how <ENTITY-SUBJECT-TO-PROJECT-INVARIANT> moves from <STORAGE> to <RENDER>.",
+      "expected_output": "Critical Constraints section and See also block must reference <WIKI>/core/constraints.md by ID (e.g. depends-on: core/constraints.md C1) rather than re-deriving the invariant from scratch. Skip this eval if your project does not maintain a constraints file."
+    },
+    {
+      "id": "synthesize-cross-links-typed",
+      "_probes": "Cross-links are typed (depends-on / derived-from / shares-pattern-with)",
+      "prompt": "Synthesize: Trace <ENTITY-WITH-KNOWN-UPSTREAM-DEPENDENCY>.",
+      "expected_output": "See also block at the bottom of generated files must contain typed cross-links with one of: depends-on, derived-from, shares-pattern-with. Untyped 'see also: foo.md' links are a failure."
+    },
+    {
+      "id": "synthesize-updates-index",
+      "_probes": "Every file created/extended/merged is reflected in <WIKI>/index.md",
+      "prompt": "Synthesize: Trace <NEW-DOMAIN-NOT-YET-IN-WIKI>.",
+      "expected_output": "<WIKI>/index.md must be updated in the same turn the flow files are written. The index entries must point to the actual generated files and be one-line each."
+    },
+    {
+      "id": "consolidate-pattern-across-domains",
+      "_probes": "Consolidate normalizes recurring patterns across 2+ existing domain files",
+      "prompt": "Consolidate: <SCOPE-COVERING-MULTIPLE-DOMAINS>",
+      "expected_output": "Must operate on existing wiki files (not raw code). Identifies one or more patterns documented in 2+ domains, picks a canonical home, trims duplicates to references, and wires shares-pattern-with links. Does NOT invent new patterns or re-explore code."
+    },
+    {
+      "id": "lint-finds-missing-patterns-or-impact",
+      "_probes": "Lint flags missing patterns.md / impact.md for flows that document reusable behavior or non-trivial risk",
+      "prompt": "Lint: entire wiki",
+      "expected_output": "Issues Found section with Type / Location / Description / Severity / Action. Must include any flow that reveals reusable behavior without a patterns.md, or non-trivial risk without an impact.md, as a Missing Pattern / Missing Impact issue. Suggested Fixes and Critical Observations sections present."
+    },
+    {
+      "id": "rejects-generic-architecture-question",
+      "_probes": "Skill refuses to act as a generic architecture explainer; redirects to Interview",
+      "prompt": "Give me a high-level overview of the architecture of this codebase.",
+      "expected_output": "Must NOT produce a generic file-by-file summary. Should redirect to Interview Mode and ask the user to scope to a specific entity, feature, or mutation. The output is short, not a long descriptive answer."
+    }
+  ]
+}

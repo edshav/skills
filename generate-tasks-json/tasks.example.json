@@ -1,0 +1,43 @@
+{
+  "tasks": [
+    {
+      "id": "feature-user-profile",
+      "type": "parent",
+      "issue_type": "Feature",
+      "title": "User Profile Page",
+      "description": "Display a user's profile at /users/:username (name, avatar, bio, recent activity). Spec: docs/specs/user-profile.md.",
+      "assignee": "alice",
+      "labels": ["enhancement"]
+    },
+    {
+      "id": "user-profile-contract",
+      "type": "sub-issue",
+      "parent": "feature-user-profile",
+      "issue_type": "Task",
+      "title": "[API] User profile endpoint",
+      "description": "Deliver GET /api/users/:username returning { name, avatar_url, bio, recent_activity[] }. Recent activity is computed and shaped server-side (no joining or aggregation on the client). Acceptance: schema test against the agreed JSON shape; auth / visibility rules enforced per spec.",
+      "assignee": "alice",
+      "labels": ["enhancement"]
+    },
+    {
+      "id": "user-profile-ui",
+      "type": "sub-issue",
+      "parent": "feature-user-profile",
+      "issue_type": "Task",
+      "title": "[UI] User profile page rendering",
+      "description": "Render the profile page against the agreed API shape. Acceptance is the spec's acceptance checklist (header layout, empty state when no recent activity, loading skeleton, 404 error state).",
+      "assignee": "bob",
+      "labels": ["enhancement"]
+    },
+    {
+      "id": "user-profile-docs",
+      "type": "sub-issue",
+      "parent": "feature-user-profile",
+      "issue_type": "Task",
+      "title": "[DOCS] Document the user profile page",
+      "description": "After the two implementation issues land, document the shipped endpoint surface, page anatomy, and any known limitations in docs/user-profile.md.",
+      "assignee": "bob",
+      "labels": ["documentation"]
+    }
+  ]
+}
