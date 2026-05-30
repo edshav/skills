@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A monorepo of reusable, harness- and LLM-agnostic instruction modules ("skills") packaged in the [SKILL format](https://agentskills.io/specification) — YAML frontmatter + Markdown body. Each top-level subdirectory is one self-contained skill; there is no shared build, no root `package.json`, and no CI. Skills are consumed either by dropping the folder into an agent's skills directory (e.g. `~/.claude/skills/<name>/`) or by pasting `SKILL.md`'s body into a non-SKILL-aware instruction surface (Cursor rules, Copilot instructions, etc.).
 
-Current skills: [`generate-tasks-json/`](generate-tasks-json/), [`github-cli/`](github-cli/), [`mutation-analyzer/`](mutation-analyzer/). The root [`README.md`](README.md) is the up-to-date inventory.
+Current skills: [`generate-tasks-json/`](generate-tasks-json/), [`mutation-analyzer/`](mutation-analyzer/). The root [`README.md`](README.md) is the up-to-date inventory.
 
 ## Per-skill anatomy (and what to keep in sync)
 
@@ -36,14 +36,13 @@ REPO="<org>/<repo>" MILESTONE="v1" node create-issues.js --file path/to/tasks.js
 
 There is no linter, formatter, or test runner configured. "Testing" the script means running `--dry-run` against a real `tasks.json` and inspecting the output.
 
-## Two non-negotiable execution rules baked into the skills themselves
+## The non-negotiable execution rule baked into the skills themselves
 
-These are enforced by the bundled SKILL.md files and override any auto-execute bias:
+This is enforced by the bundled SKILL.md files and overrides any auto-execute bias:
 
 1. **Never invoke `create-issues.js` without `--dry-run` yourself.** The live run creates real GitHub issues — a write action. Show the user the dry-run output and the live command; let them invoke the live run. (Source: `generate-tasks-json/SKILL.md` → "Validate".)
-2. **Every state-changing GitHub action requires explicit per-action user approval** — push, comment, review submit, issue create/close, merge, release, label edit. Read-only `gh` calls (`gh pr view`, `gh issue list`, `gh pr diff`, drafting locally) are frictionless. Positive feedback on a draft ("looks good") is not approval to submit. (Source: `github-cli/SKILL.md` §4–§5.)
 
-If you are editing a SKILL.md and tempted to soften either rule, re-read the README's "Why these design choices" section first — each rule fixes a documented failure mode.
+If you are editing a SKILL.md and tempted to soften this rule, re-read the README's "Why these design choices" section first — the rule fixes a documented failure mode.
 
 ## Issue-planning work in this repo
 
