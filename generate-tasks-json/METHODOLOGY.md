@@ -1,22 +1,22 @@
-## Rules for GitHub Issues & Project Board
+# Rules for GitHub Issues & Project Board
 
 These rules govern how features are planned, decomposed, and tracked as GitHub issues. They are designed to keep issue trees small, reviewable, and aligned with how the work actually ships through PRs.
 
 ---
 
-### 1. Single Source of Truth
+## 1. Single Source of Truth
 
 - All feature discussions, bug reports, and technical decisions must take place within **GitHub Issues**, not in external messengers. This ensures a searchable history for stakeholders and the team.
 
 ---
 
-### 2. Milestone-Driven Progress
+## 2. Milestone-Driven Progress
 
 - Every issue must be attached to a specific **Milestone** (e.g. `v1`). This allows the Product Owner (or whoever tracks delivery) to see overall release completion at a glance.
 
 ---
 
-### 3. Assignment Principle
+## 3. Assignment Principle
 
 - **One Responsible Person per Issue:** Each issue must have exactly **one assignee**.
 - Assignment defines ownership and responsibility for delivery.
@@ -24,14 +24,14 @@ These rules govern how features are planned, decomposed, and tracked as GitHub i
 
 ---
 
-### 4. No Direct Pushes to Master
+## 4. No Direct Pushes to Master
 
 - All code changes must be submitted via **Pull Requests (PR)**.
 - Every PR should reference its corresponding issue number in the description (e.g. `Closes #12`). This triggers GitHub automation to move the issue to the **Done** column and close it automatically upon merge.
 
 ---
 
-### 5. Project Board Management (Board View)
+## 5. Project Board Management (Board View)
 
 - The **Board** view is the primary tool for daily operations.
 - **Status Integrity:** developers are responsible for keeping their cards up to date:
@@ -86,7 +86,7 @@ Sub-issues are created with:
 
 ---
 
-### 6.2.1. The contract is the seam (default decomposition)
+#### 6.2.1. The contract is the seam (default decomposition)
 
 Most Features have the same shape: some part of the system **produces** data or behavior, and another part **consumes** it. The work splits cleanly along the **contract between them**, and that is the _only_ split made by default.
 

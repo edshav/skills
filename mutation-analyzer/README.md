@@ -42,7 +42,7 @@ machine with non-skippable checklists and mandatory file outputs.
 
 ## The 5-mode state machine
 
-```
+```text
                 ┌───────────────────────────────────────────────────────┐
                 │                                                       │
                 ▼                                                       │
@@ -214,7 +214,7 @@ template are project-agnostic.
 
 ### What the wiki layout looks like in practice
 
-```
+```text
 <wiki-root>/
 ├── index.md                          ← authoritative index (always updated)
 ├── core/
@@ -268,11 +268,11 @@ template are project-agnostic.
 
 Copy the folder into the agent's skills directory, per-project or user-global:
 
-| Harness     | Project scope                                       | User scope                                |
-| ----------- | --------------------------------------------------- | ----------------------------------------- |
-| Claude Code | `<your-repo>/.claude/skills/mutation-analyzer/`     | `~/.claude/skills/mutation-analyzer/`     |
-| Codex       | `<your-repo>/.agents/skills/mutation-analyzer/`     | `~/.agents/skills/mutation-analyzer/`     |
-| Other       | Whatever directory your harness reads skills from   | Same, in the user-global location         |
+| Harness     | Project scope                                     | User scope                            |
+| ----------- | ------------------------------------------------- | ------------------------------------- |
+| Claude Code | `<your-repo>/.claude/skills/mutation-analyzer/`   | `~/.claude/skills/mutation-analyzer/` |
+| Codex       | `<your-repo>/.agents/skills/mutation-analyzer/`   | `~/.agents/skills/mutation-analyzer/` |
+| Other       | Whatever directory your harness reads skills from | Same, in the user-global location     |
 
 ### Instruction-surface install (everything else)
 

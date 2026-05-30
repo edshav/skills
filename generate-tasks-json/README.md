@@ -37,15 +37,15 @@ See [`METHODOLOGY.md`](METHODOLOGY.md) for the full rules.
 
 ## What's in the box
 
-| File                                       | Purpose                                                                                  | Audience                  |
-| ------------------------------------------ | ---------------------------------------------------------------------------------------- | ------------------------- |
-| `README.md`                                | This file — what it is, why, how to install / use                                        | humans                    |
-| [`METHODOLOGY.md`](METHODOLOGY.md)         | The binding planning rules (hierarchy, contract-as-seam, prefixes, assignment, labels)   | humans + AI coding agents |
-| [`SKILL.md`](SKILL.md)                     | How to mechanically draft a `tasks.json` for the script — written as a SKILL              | AI coding agents          |
-| [`create-issues.js`](create-issues.js)     | The Node.js script that consumes `tasks.json` and creates the GitHub issues              | run via `node`            |
-| [`tasks.example.json`](tasks.example.json) | A worked example: one Feature + two contract sides + a `[DOCS]` follow-up                | humans                    |
-| [`package.json`](package.json)             | Marks the script as ESM so `import` works                                                | Node                      |
-| `LICENSE`                                  | MIT                                                                                      |                           |
+| File                                       | Purpose                                                                                | Audience                  |
+| ------------------------------------------ | -------------------------------------------------------------------------------------- | ------------------------- |
+| `README.md`                                | This file — what it is, why, how to install / use                                      | humans                    |
+| [`METHODOLOGY.md`](METHODOLOGY.md)         | The binding planning rules (hierarchy, contract-as-seam, prefixes, assignment, labels) | humans + AI coding agents |
+| [`SKILL.md`](SKILL.md)                     | How to mechanically draft a `tasks.json` for the script — written as a SKILL           | AI coding agents          |
+| [`create-issues.js`](create-issues.js)     | The Node.js script that consumes `tasks.json` and creates the GitHub issues            | run via `node`            |
+| [`tasks.example.json`](tasks.example.json) | A worked example: one Feature + two contract sides + a `[DOCS]` follow-up              | humans                    |
+| [`package.json`](package.json)             | Marks the script as ESM so `import` works                                              | Node                      |
+| `LICENSE`                                  | MIT                                                                                    |                           |
 
 ---
 
@@ -71,14 +71,19 @@ The script has no runtime dependencies beyond `gh` and Node built-ins — `packa
 1. **Read [`METHODOLOGY.md`](METHODOLOGY.md) first** if you've never used this before. It is short.
 2. **Write `tasks.json`** — see [`tasks.example.json`](tasks.example.json) for the shape. AI coding agents should use [`SKILL.md`](SKILL.md).
 3. **Validate with a dry-run** — no GitHub API calls, deterministic mock issue numbers, fully reviewable:
+
    ```bash
    REPO="your-org/your-repo" MILESTONE="v1" node create-issues.js --dry-run
    ```
+
 4. **Run for real** — pauses for a typed `yes` confirmation:
+
    ```bash
    REPO="your-org/your-repo" MILESTONE="v1" node create-issues.js
    ```
+
 5. **If interrupted**, resume without creating duplicates (state lives in `.create_issues_state.json`):
+
    ```bash
    REPO="your-org/your-repo" MILESTONE="v1" node create-issues.js --resume
    ```
