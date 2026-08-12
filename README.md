@@ -10,6 +10,7 @@ Each skill is harness- and LLM-agnostic. Drop the folder into your agent's skill
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [`mutation-analyzer`](mutation-analyzer/)     | Turns the agent into an investigative staff engineer for **mutation-oriented** code analysis — "if I change X, what breaks, where does it silently corrupt, and where does it loudly fail?" Persists structured, code-grounded knowledge files under a `wiki/code-analysis/` directory. |
 | [`generate-tasks-json`](generate-tasks-json/) | Bulk-creates well-structured GitHub issues from a single JSON file, plus the **planning methodology** (contract-as-seam decomposition, two-level hierarchy, one Feature + two contract sides by default) that the agent applies when drafting that JSON.                                |
+| [`reader-test`](reader-test/)                 | Finds the errors in a spec, plan or estimate that its **own author cannot see**, by handing the file to readers who have nothing but the file — one reader per lens (executor, numbers, source fidelity, internal consistency, money/data risk), each forbidden the others' territory. |
 
 Each skill ships with a generic `evals/evals.json` probing the rules it enforces — customize the placeholders to refer to real entities in your codebase and run with the eval harness of your choice.
 
@@ -30,7 +31,7 @@ Most SKILL-aware harnesses auto-load skills on session start; trigger phrases de
 
 ## Contributing
 
-Open an issue or PR. New skills welcome — see [`mutation-analyzer`](mutation-analyzer/) and [`generate-tasks-json`](generate-tasks-json/) for the file layout to imitate.
+Open an issue or PR. New skills welcome — see [`mutation-analyzer`](mutation-analyzer/) and [`generate-tasks-json`](generate-tasks-json/) for the file layout to imitate. Every skill directory carries `SKILL.md`, `README.md`, `evals/evals.json` and `LICENSE`; keep all four in sync when a rule changes.
 
 ## License
 

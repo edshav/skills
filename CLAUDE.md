@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A monorepo of reusable, harness- and LLM-agnostic instruction modules ("skills") packaged in the [SKILL format](https://agentskills.io/specification) — YAML frontmatter + Markdown body. Each top-level subdirectory is one self-contained skill; there is no shared build, no root `package.json`, and no CI. Skills are consumed either by dropping the folder into an agent's skills directory (e.g. `~/.claude/skills/<name>/`) or by pasting `SKILL.md`'s body into a non-SKILL-aware instruction surface (Cursor rules, Copilot instructions, etc.).
 
-Current skills: [`generate-tasks-json/`](generate-tasks-json/), [`mutation-analyzer/`](mutation-analyzer/). The root [`README.md`](README.md) is the up-to-date inventory.
+Current skills: [`generate-tasks-json/`](generate-tasks-json/), [`mutation-analyzer/`](mutation-analyzer/), [`reader-test/`](reader-test/). The root [`README.md`](README.md) is the up-to-date inventory.
 
 ## Per-skill anatomy (and what to keep in sync)
 

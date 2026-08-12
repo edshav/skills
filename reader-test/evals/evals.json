@@ -1,0 +1,96 @@
+{
+  "skill_name": "reader-test",
+  "_notes": "Generic eval set. Replace <DOC-PATH> / <REPO-PATH> and the placeholder document contents with real files from your project. Each eval probes one rule from SKILL.md. The dispatched readers are part of what is under test — several evals grade the reader prompts the skill produces, not only the findings it reports back. The last three are negative cases: they check the skill declines or resists, and deleting them is how a skill starts over-triggering.",
+  "evals": [
+    {
+      "id": "readers-get-files-never-conversation",
+      "_probes": "The one rule — no conversation context, no framing, no warning about shaky parts, reaches a reader",
+      "prompt": "We spent this whole session arguing about whether the retry section in <DOC-PATH> is right, and I already suspect the estimate table is soft. Reader-test it.",
+      "expected_output": "The prompts sent to readers must contain no summary of the prior discussion, no statement of what the document is for, and no hint about which sections are suspected weak. Leaking any of the session's framing into a reader prompt is a failure even if the resulting findings are good."
+    },
+    {
+      "id": "states-context-absence-explicitly",
+      "_probes": "Each reader is told 'you have no context from any prior conversation — that is deliberate'",
+      "prompt": "Reader-test <DOC-PATH>.",
+      "expected_output": "Every reader prompt states outright that the absence of context is deliberate and that the reader should not ask for it or apologise for it. Without this line readers hedge every finding; its absence is a failure."
+    },
+    {
+      "id": "one-lens-and-forbids-the-others",
+      "_probes": "One lens per reader, with the other lenses named and forbidden — 'focus on X' is not sufficient",
+      "prompt": "Reader-test <DOC-PATH>.",
+      "expected_output": "Each reader gets exactly one lens, and the prompt names the other lenses and forbids reporting them. A prompt that says only 'focus on the numbers' without forbidding wording/structure/missing-feature findings is a failure. A single reader asked to 'review the document' is a failure."
+    },
+    {
+      "id": "demands-checkable-findings",
+      "_probes": "Require line number, quote, and arithmetic; state that an uncheckable finding is worthless",
+      "prompt": "Reader-test <DOC-PATH>, it has an estimate table in it.",
+      "expected_output": "Reader prompts require a line number and a verbatim quote per finding, and require the arithmetic for numeric findings. Findings that come back as 'consider clarifying section 3' with no anchor must be visible as such, not passed to the user as findings."
+    },
+    {
+      "id": "requires-coverage-list",
+      "_probes": "Fact-checking readers end with a list of what they checked and found correct",
+      "prompt": "Reader-test <DOC-PATH> and tell me whether it is clean.",
+      "expected_output": "Reader prompts ask for a closing list of what was checked and found correct. The answer to 'is it clean' must be grounded in that coverage list — an empty finding list reported as a clean document, with no evidence of what was read, is a failure."
+    },
+    {
+      "id": "forbids-editing-and-uses-absolute-paths",
+      "_probes": "DO NOT EDIT ANY FILE, and readers are given absolute paths",
+      "prompt": "Reader-test <DOC-PATH>.",
+      "expected_output": "Every reader prompt contains an explicit instruction not to edit any file and gives absolute paths. No file on disk is modified during the pass. A reader that starts fixing the document is a failure of the prompt, not of the reader."
+    },
+    {
+      "id": "adds-money-data-lens-conditionally",
+      "_probes": "Four standard lenses; the fifth is added when the document describes money, personal data, or anything irreversible",
+      "prompt": "Reader-test <DOC-PATH> — it specs a payout flow where contributors submit work and get paid per accepted item.",
+      "expected_output": "Five readers, including the money/data risk lens. That lens is sent in both directions: the attacker who wants to be paid twice or paid for someone else's work, and the honest user who does everything right and ends up unpaid without finding out. Running only the standard four on a payout spec is a failure."
+    },
+    {
+      "id": "numbers-lens-recomputes-with-scripts",
+      "_probes": "Numbers auditor recomputes everything with a script, trusts no stated total, and treats prose counts as numbers",
+      "prompt": "Reader-test <DOC-PATH>, focus especially on the estimate.",
+      "expected_output": "The numbers reader is told to trust no stated total and to compute with a script. It is pointed at the whole chain hanging off the estimate table — rows, sum, unit conversion, comparison against any previous figure — and at counts stated in prose ('three reasons', 'seven fields') against the lists that follow."
+    },
+    {
+      "id": "source-fidelity-checks-intent-vs-completed-action",
+      "_probes": "Source fidelity is warned that a draft is not a sent message, and that claims about code behaviour are written from memory",
+      "prompt": "Reader-test <DOC-PATH>. Repo and correspondence are at <REPO-PATH>.",
+      "expected_output": "The source-fidelity reader is given the repository paths and is explicitly told to check claims about what was said to or agreed with another party (an intention recorded as a completed action), and claims about code behaviour, against the actual files. Citation rot and citation substance are both checked."
+    },
+    {
+      "id": "internal-consistency-hunts-stale-regions",
+      "_probes": "Internal consistency targets the stale region — analysis a later section contradicts or replaces but which still reads as live",
+      "prompt": "Reader-test <DOC-PATH>. I revised it heavily yesterday.",
+      "expected_output": "The internal-consistency reader works from the document alone, no other files, and is aimed at regions a later section contradicts, supersedes or delegates away while they still read as current. Also terms used with two meanings, cross-references that do not say what they are cited for, and future-tense statements a later section reports as done."
+    },
+    {
+      "id": "all-lenses-one-document",
+      "_probes": "Run all four or five lenses against one document rather than one lens across several",
+      "prompt": "Reader-test these four specs: <DOC-PATH-1>, <DOC-PATH-2>, <DOC-PATH-3>, <DOC-PATH-4>.",
+      "expected_output": "Must not assign one lens per document. Either runs the full lens set per document, or scopes down to the document that matters and says so. For a genuine document set, adds a cross-document reader whose only job is figure agreement across files."
+    },
+    {
+      "id": "verifies-findings-before-reporting",
+      "_probes": "Findings are suspicions, not verdicts — check each against the file, but check rather than dismiss",
+      "prompt": "Reader-test <DOC-PATH> and tell me what to fix.",
+      "expected_output": "Findings are checked against the file before being passed on, and the report distinguishes verified findings from ones rejected on inspection, saying which were rejected and why. Forwarding the readers' raw output as a verdict list is a failure; so is silently dropping findings without stating that they were rejected."
+    },
+    {
+      "id": "gap-is-not-automatically-filled",
+      "_probes": "A gap can be evidence the mechanism should not exist; decide by scale, not by filling every absence",
+      "prompt": "The readers came back with: this state has no exit, this term has no clearing action, this column has no source. The mechanism they all touch handles about thirty events over five months. What do we do?",
+      "expected_output": "Must weigh deleting the mechanism against specifying it, and given thirty events over five months should lean toward removing it rather than adding three specifications. Answering each absence with an addition, growing the document and the estimate, is the documented misuse and is a failure here."
+    },
+    {
+      "id": "declines-low-consequence-document",
+      "_probes": "Scale by consequence, not length — a document nobody builds from does not need this",
+      "prompt": "Can you reader-test this one-page meeting summary I'm posting in the team channel?",
+      "expected_output": "Should decline or scale down rather than run a full pass, and say why: nothing is built or priced from it, so the cost is not repaid. Spending a full multi-reader pass on it is a failure."
+    },
+    {
+      "id": "declines-copy-editing-request",
+      "_probes": "The skill finds errors of fact, arithmetic and specification — not prose problems",
+      "prompt": "Go through <DOC-PATH> and tighten the wording, fix the passive voice and make the headings consistent.",
+      "expected_output": "Must not dispatch readers. This is a copy-editing request; the skill either does the editing directly as an ordinary task or offers a reader-test separately if the document is also about to be acted on. Running the lens set to return wording findings is a failure."
+    }
+  ]
+}
