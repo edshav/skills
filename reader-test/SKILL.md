@@ -20,6 +20,16 @@ sentence is present in your head.
 
 The fix is to hand the file to readers who have nothing but the file.
 
+## Before you start
+
+**Confirm with the user before dispatching any reader.** A pass costs several hundred
+thousand tokens (see *Cost*) and is worth nothing if it reads the wrong file. State in one
+line what you are about to run — the document's absolute path, the lenses you picked, and
+that nothing gets edited — and wait for an explicit go-ahead. This holds when the user
+asked for the pass by name too: they named the skill, not the file and not the lens set. A
+correction is answered by restating the corrected plan and waiting again, not by launching
+on the assumption you read it right.
+
 ## The one rule
 
 **Readers get files, never conversation.** No summary of what the document is for, no
@@ -210,10 +220,32 @@ convergence — check that the lenses were the same before you read it that way.
 
 ## Reporting to the user
 
-Lead with what changes their decision — the finding that alters a number, a promise, or a
-build order — not with the count. Say what you verified and rejected, and say which
-findings you have not yet fixed, by name. If the pass moved a figure that someone else is
-holding, that consequence is the headline, not a footnote.
+**The pass ends with a list in chat. Fix nothing.** No edit to the reviewed document, no
+"this one is obvious" correction, no number quietly repaired while the rest gets reported.
+Which findings are real, and which of the real ones are worth the edit, is the author's
+call — the readers are the ones without context, and a pass that ends with a modified file
+has spent that call on their behalf.
+
+List every finding that survived triage, most consequential first — the ones that move a
+number, a promise or a build order at the top, not document order and not a count. One
+line each, checkable without opening a reader's transcript:
+
+```text
+<N>. [<lens>] <path>:<line> — <what is wrong>. → <what fixing it takes>.
+```
+
+Show the arithmetic inline where a number is involved (`42 × 3 = 126, stated 120`) and
+quote the text where a word is. A finding that needs three lines is either two findings
+or one you have not verified yet.
+
+Close with two lines and stop: what you checked and rejected, by name, so a suppressed
+finding stays visible rather than silently dropped; and which findings to apply. Then
+wait. If the pass moved a figure someone else is holding, that consequence belongs at the
+top of the list, not in the closing lines.
+
+Apply only what the user names back. "All of them" is an answer they give, never one you
+assume — and a finding whose fix is a deletion gets applied as a deletion, not quietly
+upgraded to a rewrite.
 
 ## Cost
 

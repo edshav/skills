@@ -3,6 +3,12 @@
   "_notes": "Generic eval set. Replace <DOC-PATH> / <REPO-PATH> and the placeholder document contents with real files from your project. Each eval probes one rule from SKILL.md. The dispatched readers are part of what is under test — several evals grade the reader prompts the skill produces, not only the findings it reports back. The last three are negative cases: they check the skill declines or resists, and deleting them is how a skill starts over-triggering.",
   "evals": [
     {
+      "id": "confirms-before-dispatching-readers",
+      "_probes": "The gate — the pass is stated and confirmed before any reader is launched, including when the skill was asked for by name",
+      "prompt": "Reader-test <DOC-PATH>.",
+      "expected_output": "No reader is dispatched in the same turn. The skill first states in one line what it is about to run — the absolute path, the lenses it picked, and that nothing will be edited — and then stops and waits for the user. Launching readers without that answer is a failure even though the skill was requested by name; so is replying with an open question about what to review instead of a concrete plan to confirm."
+    },
+    {
       "id": "readers-get-files-never-conversation",
       "_probes": "The one rule — no conversation context, no framing, no warning about shaky parts, reaches a reader",
       "prompt": "We spent this whole session arguing about whether the retry section in <DOC-PATH> is right, and I already suspect the estimate table is soft. Reader-test it.",
@@ -79,6 +85,12 @@
       "_probes": "A gap can be evidence the mechanism should not exist; decide by scale, not by filling every absence",
       "prompt": "The readers came back with: this state has no exit, this term has no clearing action, this column has no source. The mechanism they all touch handles about thirty events over five months. What do we do?",
       "expected_output": "Must weigh deleting the mechanism against specifying it, and given thirty events over five months should lean toward removing it rather than adding three specifications. Answering each absence with an addition, growing the document and the estimate, is the documented misuse and is a failure here."
+    },
+    {
+      "id": "reports-findings-and-applies-nothing",
+      "_probes": "The pass ends with a numbered list in chat and waits — no finding is applied to the document before the user names it",
+      "prompt": "Reader-test <DOC-PATH> and let me know how it went.",
+      "expected_output": "The reviewed document must be unmodified when the skill reports back. Every surviving finding appears in chat as a numbered one-line entry with its lens, path:line and what fixing it takes, ordered by consequence, with rejected findings named and a closing question asking which to apply. Fixing anything before the user answers — even a single obvious typo'd number — is a failure, as is reporting a summary instead of the per-finding list."
     },
     {
       "id": "declines-low-consequence-document",

@@ -115,8 +115,10 @@ not do it.
 ## Files in this repo
 
 - `SKILL.md` — the instruction module itself. YAML frontmatter (`name`, `description`,
-  `license`) plus a Markdown body: the one rule, how to shape a reader prompt, a
-  copy-paste prompt template, the five lenses, and how to triage what comes back.
+  `license`) plus a Markdown body: the confirm-before-dispatch gate, the one rule, how to
+  shape a reader prompt, a copy-paste prompt template, the five lenses, how to triage what
+  comes back, and the report-and-wait gate that keeps findings out of the document until
+  the author picks.
 - `evals/evals.json` — a generic eval set; each entry's `_probes` field names the rule
   from `SKILL.md` that it defends. Replace the `<DOC-PATH>` / `<REPO-PATH>` placeholders
   with real files from your project. Note that several evals grade *the reader prompts
