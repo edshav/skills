@@ -48,9 +48,11 @@ else — cannot retreat to the easy findings, so it keeps digging in its own.
 | 3 | **Source fidelity** | "Does the source actually say that?" | Citation rot and citation invention, claims about what was agreed with another party, claims about code behaviour written from memory |
 | 4 | **Internal consistency** | The document against itself, no other files | Stale regions a later section contradicts but which still read as live, terms with two meanings, cross-references that don't say what they're cited for |
 | 5 | **Money / data risk** | Adversarial, and its mirror | What the system *proves* versus what it *assumes*; and the honest user who does everything right, ends up unpaid, and never finds out |
+| 6 | **Blind back-translation** | "What rules does this document actually state?" — a blind reteller, then a comparer against the source | A derivative that says something other than its source: a changed number or condition, a rule dropped inside the derivative's scope, a rule the source never made |
 
 Lenses 1–4 are the standard set. Add lens 5 whenever the document describes a system
-handling money, personal data, or anything irreversible.
+handling money, personal data, or anything irreversible. Lens 6 runs alone, on a document
+derived from a source of truth, before it is marked as synced.
 
 ---
 

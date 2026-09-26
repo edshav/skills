@@ -6,7 +6,9 @@ description: >
   sent, or gets built from, and above all when an error in it would cost money or
   rework. Surfaces the errors a document's own author cannot see. Also triggers on
   "reader test", "прогони читателей", "check this doc", "find what's wrong with this
-  spec", "is this ready to send?". DO NOT trigger for copy-editing, tone or formatting —
+  spec", "is this ready to send?". Also triggers before a derived document is marked as
+  synced to its source of truth (re-stamping a `decisions-sync` line, "пересказ вслепую",
+  "back-translation") — then run lens 6. DO NOT trigger for copy-editing, tone or formatting —
   this finds errors of fact, arithmetic and specification, not prose problems.
 license: MIT
 ---
@@ -106,7 +108,9 @@ to route around.
 ## The lenses
 
 Four are the standard set. Add the fifth whenever the document describes a system that
-handles money, personal data, or anything irreversible.
+handles money, personal data, or anything irreversible. The sixth is different in kind: it
+runs on its own, not with the others, and only on a document derived from a source of
+truth.
 
 ### 1. The executor
 
@@ -177,6 +181,32 @@ send it in two directions:
 Require concrete walkthroughs with names and exact field names. "Insufficient validation"
 is not a finding; "Alice files with Bob's txid, signature verifies against her own address,
 nothing ties the two" is.
+
+### 6. Blind back-translation
+
+*Position*: "what rules does this document actually state?"
+
+For a document derived from a source of truth (terms from a rulebook, a contractor's spec
+from decisions), after someone swept it for a source change and before it is marked as
+synced. The other lenses find errors in a document; this one finds a derivative that says
+something other than its source, in meaning rather than date.
+
+Two steps, and only the first is blind:
+
+1. **The reteller** gets the derivative alone. Strip anything that maps it back to the
+   source (a "rule → decision N" appendix), or it recites the map instead of reading the
+   text. It lists every rule the document states, each with its line number and its
+   numbers, conditions, deadlines and who acts. No interpretation, no filling gaps: a rule
+   the text only implies is listed as implied.
+2. **The comparer** gets the retelling, the source, and **the scope**: which of the
+   source's rules this derivative is supposed to carry. Without the scope every rule the
+   derivative legitimately leaves out comes back as "missing". It reports only differences
+   in substance (a number, a condition, an order, an actor, a deadline) and omissions
+   inside the scope. Wording differences are forbidden territory.
+
+Each comparer finding cites both sides: the retelling's derivative line and the source's
+line. A retold rule with no source line is either the reteller inventing or the derivative
+adding a rule the source never made; check the derivative to tell which.
 
 ## Choosing and sizing
 
