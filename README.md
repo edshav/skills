@@ -22,6 +22,12 @@ Start with each skill's `README.md` for the overview, then `SKILL.md` for the ac
 
 ## Installation
 
+Claude Code plugin (ships `reader-test`):
+
+```
+/plugin install edshav --marketplace edshav/skills
+```
+
 Two common modes per skill, regardless of harness:
 
 - **Native SKILL install** (Claude Code, Codex, other SKILL-aware harnesses): copy the skill folder into the agent's skills directory — per-project (e.g. `<your-repo>/.claude/skills/<skill-name>/`, `<your-repo>/.agents/skills/<skill-name>/`) or user-global (e.g. `~/.claude/skills/<skill-name>/`, `~/.agents/skills/<skill-name>/`).

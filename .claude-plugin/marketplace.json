@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "edshav",
+  "owner": {
+    "name": "Eduard Shavyrko",
+    "url": "https://github.com/edshav"
+  },
+  "plugins": [
+    {
+      "name": "edshav",
+      "description": "Finds the errors in a spec, plan or estimate that its own author cannot see.",
+      "source": "./",
+      "strict": false,
+      "skills": ["./reader-test"]
+    }
+  ]
+}
