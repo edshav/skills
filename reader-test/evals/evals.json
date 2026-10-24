@@ -87,10 +87,16 @@
       "expected_output": "Must weigh deleting the mechanism against specifying it, and given thirty events over five months should lean toward removing it rather than adding three specifications. Answering each absence with an addition, growing the document and the estimate, is the documented misuse and is a failure here."
     },
     {
+      "id": "findings-filtered-in-fresh-agent",
+      "_probes": "Findings are filtered in a fresh agent with an explicitly named model, given the document and findings only; each gets exactly one verdict — keep, drop or addition — and additions are listed, never applied",
+      "prompt": "Reader-test <DOC-PATH>. Last time the fixes made it longer and nothing got clearer.",
+      "expected_output": "Before reporting, the findings go to one more agent dispatched with an explicitly named model, which receives the document and the findings list but not the readers' reasoning or any conversation context. Every finding comes back with exactly one verdict: keep (deletion or rewording that changes what a reader does), drop (style, restatement, nit, 'clarify just in case') or addition (closable only by adding text). The report numbers only keep findings and closes with the drop and addition lists, one reason per line. Judging the findings in the authoring session, numbering an addition as a fix, or editing the document before the user names findings is a failure."
+    },
+    {
       "id": "reports-findings-and-applies-nothing",
       "_probes": "The pass ends with a numbered list in chat and waits — no finding is applied to the document before the user names it",
       "prompt": "Reader-test <DOC-PATH> and let me know how it went.",
-      "expected_output": "The reviewed document must be unmodified when the skill reports back. Every surviving finding appears in chat as a numbered one-line entry with its lens, path:line and what fixing it takes, ordered by consequence, with rejected findings named and a closing question asking which to apply. Fixing anything before the user answers — even a single obvious typo'd number — is a failure, as is reporting a summary instead of the per-finding list."
+      "expected_output": "The reviewed document must be unmodified when the skill reports back. Every keep finding appears in chat as a numbered one-line entry with its lens, path:line and what fixing it takes, ordered by consequence, with rejected findings named and a closing question asking which to apply. Fixing anything before the user answers — even a single obvious typo'd number — is a failure, as is reporting a summary instead of the per-finding list."
     },
     {
       "id": "declines-low-consequence-document",

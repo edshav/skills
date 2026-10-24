@@ -93,7 +93,9 @@ finding is fine is the same reflex that produced the gap.
 absence asks to be filled. The same finding is equally evidence the mechanism should not
 exist. This is the most common way the harness gets misused: answer every gap with an
 addition and the document grows a third while the thing delivered stays the same — and
-each addition looks justified on its own.
+each addition looks justified on its own. So a fresh agent, which sees the document and the
+findings but not the readers' reasoning, sorts each finding into keep, drop or addition
+before the report, and additions are listed as risks rather than applied.
 
 ---
 

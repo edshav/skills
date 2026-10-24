@@ -240,6 +240,15 @@ document grows a third in size and an estimate doubles across three passes while
 thing actually delivered stays the same — and it is the most common way this harness gets
 misused, because the additions all look justified one at a time.
 
+**Filter the findings in a fresh agent.** The session that wrote the document is anchored
+on it and waves additions through. Give one more agent the document and the findings list,
+not the readers' reasoning, on the strongest judgement model the session has (named
+explicitly, never above the session's own). It gives each finding exactly one verdict:
+*keep* (the fix is a deletion or a rewording, and after it a reader would act
+differently), *drop* (style, a restatement, a nit, "clarify just in case") or *addition*
+(it closes only by adding text, and goes on a "Risks that would need an addition" list,
+not into the document).
+
 **Repeats across lenses are load-bearing.** Two readers forbidden from each other's
 territory arriving at the same passage means the passage is genuinely broken.
 
@@ -256,9 +265,9 @@ Which findings are real, and which of the real ones are worth the edit, is the a
 call — the readers are the ones without context, and a pass that ends with a modified file
 has spent that call on their behalf.
 
-List every finding that survived triage, most consequential first — the ones that move a
-number, a promise or a build order at the top, not document order and not a count. One
-line each, checkable without opening a reader's transcript:
+List every *keep* finding, most consequential first — the ones that move a number, a
+promise or a build order at the top, not document order and not a count. One line each,
+checkable without opening a reader's transcript:
 
 ```text
 <N>. [<lens>] <path>:<line> — <what is wrong>. → <what fixing it takes>.
@@ -268,14 +277,16 @@ Show the arithmetic inline where a number is involved (`42 × 3 = 126, stated 12
 quote the text where a word is. A finding that needs three lines is either two findings
 or one you have not verified yet.
 
-Close with two lines and stop: what you checked and rejected, by name, so a suppressed
-finding stays visible rather than silently dropped; and which findings to apply. Then
-wait. If the pass moved a figure someone else is holding, that consequence belongs at the
-top of the list, not in the closing lines.
+Close with the *drop* and *addition* lists, one line and one reason per finding, plus what
+you checked and rejected, so a suppressed finding stays visible rather than silently
+dropped; then ask which findings to apply, and wait. If the pass moved a figure someone
+else is holding, that consequence belongs at the top of the list, not in the closing
+lines.
 
 Apply only what the user names back. "All of them" is an answer they give, never one you
 assume — and a finding whose fix is a deletion gets applied as a deletion, not quietly
-upgraded to a rewrite.
+upgraded to a rewrite. Check each one against its source (the code, the decisions record)
+right before the edit, and end by showing the diff.
 
 ## Cost
 
