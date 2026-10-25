@@ -28,6 +28,12 @@ Claude Code plugin (ships `reader-test`):
 /plugin install edshav --marketplace edshav/skills
 ```
 
+Telegram MCP plugin (read-only access to your own Telegram account, see [edshav/telegram-ai](https://github.com/edshav/telegram-ai)):
+
+```
+/plugin install telegram --marketplace edshav/skills
+```
+
 Two common modes per skill, regardless of harness:
 
 - **Native SKILL install** (Claude Code, Codex, other SKILL-aware harnesses): copy the skill folder into the agent's skills directory — per-project (e.g. `<your-repo>/.claude/skills/<skill-name>/`, `<your-repo>/.agents/skills/<skill-name>/`) or user-global (e.g. `~/.claude/skills/<skill-name>/`, `~/.agents/skills/<skill-name>/`).

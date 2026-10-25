@@ -12,6 +12,11 @@
       "source": "./",
       "strict": false,
       "skills": ["./reader-test"]
+    },
+    {
+      "name": "telegram",
+      "description": "Read-only Telegram MCP server for your own account: list, search and read chats and public channels.",
+      "source": { "source": "github", "repo": "edshav/telegram-ai" }
     }
   ]
 }
