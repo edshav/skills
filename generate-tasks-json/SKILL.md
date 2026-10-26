@@ -40,7 +40,7 @@ If the project ships none of this, skip this section — write scope from first 
 
 ## File location and shape
 
-The script defaults to `./tasks.json` in the current working directory but accepts `--file <path>`. Place the file wherever is convenient — many projects keep it next to the script.
+`create-issues.js` ships next to this `SKILL.md`. It reads `./tasks.json` and writes `.create_issues_state.json` and `create_issues.log` in the current working directory, so run it from the target project and call the script by its path in this skill's directory. Keep `tasks.json` in the project, not in the skill directory: a plugin cache is replaced on update.
 
 ```json
 {
@@ -119,10 +119,10 @@ The default shape (one `parent` + the two contract sides). A canonical worked ex
 After writing the file, run dry-run mode — it validates, prints what would be created, and makes **no** GitHub API calls:
 
 ```bash
-REPO="<org>/<repo>" MILESTONE="<milestone>" node create-issues.js --dry-run
+REPO="<org>/<repo>" MILESTONE="<milestone>" node <skill-dir>/create-issues.js --dry-run
 ```
 
-If the file is elsewhere: append `--file <path>`.
+`<skill-dir>` is the directory this `SKILL.md` was loaded from. If `tasks.json` is not in the current directory: append `--file <path>`.
 
 Fix any `❌` lines before reporting done. Do **not** run the live command (without `--dry-run`) yourself — that creates real GitHub issues, a write action requiring explicit user approval. Show the user the dry-run output and the live command and let them invoke it.
 

@@ -96,7 +96,7 @@ The script has no runtime dependencies beyond `gh` and Node built-ins — `packa
 
 ## Installing in other harnesses (instruction-surface install)
 
-The body of `SKILL.md` (everything after the YAML frontmatter) is self-contained with no harness-specific runtime dependencies — it only assumes the agent can read and write files in the working directory and run `node create-issues.js`.
+The body of `SKILL.md` (everything after the YAML frontmatter) is self-contained with no harness-specific runtime dependencies — it only assumes the agent can read and write files in the working directory and run `node <skill-dir>/create-issues.js` from the target project.
 
 Drop it into whichever instruction surface your tool exposes:
 

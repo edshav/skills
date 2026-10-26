@@ -19,6 +19,8 @@ Each skill directory contains:
 
 When modifying any rule in a `SKILL.md`, audit `README.md` and `evals/evals.json` in the same skill for drift — they encode the same rules in three different registers (prompt, human doc, executable check).
 
+A new or renamed skill also needs its entry in `.claude-plugin/marketplace.json` and its `/plugin install` command in the root `README.md`.
+
 ## The one skill with code: `generate-tasks-json`
 
 Node.js ≥ 18, ESM (`"type": "module"` in `package.json`), zero runtime deps beyond the `gh` CLI. The entry point is `create-issues.js`.

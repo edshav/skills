@@ -34,6 +34,13 @@ Telegram MCP plugin (read-only access to your own Telegram account, see [edshav/
 /plugin install telegram --marketplace edshav/skills
 ```
 
+`generate-tasks-json` and `mutation-analyzer` ship as separate opt-in plugins:
+
+```
+/plugin install generate-tasks-json --marketplace edshav/skills
+/plugin install mutation-analyzer --marketplace edshav/skills
+```
+
 Two common modes per skill, regardless of harness:
 
 - **Native SKILL install** (Claude Code, Codex, other SKILL-aware harnesses): copy the skill folder into the agent's skills directory — per-project (e.g. `<your-repo>/.claude/skills/<skill-name>/`, `<your-repo>/.agents/skills/<skill-name>/`) or user-global (e.g. `~/.claude/skills/<skill-name>/`, `~/.agents/skills/<skill-name>/`).

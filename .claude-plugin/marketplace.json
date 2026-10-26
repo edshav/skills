@@ -1,6 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "edshav",
+  "description": "Harness-agnostic skills for specs, issue planning and code-change tracing, plus a read-only Telegram plugin.",
   "owner": {
     "name": "Eduard Shavyrko",
     "url": "https://github.com/edshav"
@@ -14,8 +15,22 @@
       "skills": ["./reader-test"]
     },
     {
+      "name": "generate-tasks-json",
+      "description": "Plans a milestone as a tasks.json of Features and sub-issues and batch-creates them as GitHub issues with the bundled create-issues.js.",
+      "source": "./",
+      "strict": false,
+      "skills": ["./generate-tasks-json"]
+    },
+    {
+      "name": "mutation-analyzer",
+      "description": "Traces how data flows across layers and what breaks if you change it, anchored in actual code paths.",
+      "source": "./",
+      "strict": false,
+      "skills": ["./mutation-analyzer"]
+    },
+    {
       "name": "telegram",
-      "description": "Read-only Telegram MCP server for your own account: list, search and read chats and public channels.",
+      "description": "Read-only Telegram for your own account: list, search and read chats and public channels.",
       "source": { "source": "github", "repo": "edshav/telegram-ai" }
     }
   ]
