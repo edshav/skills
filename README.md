@@ -34,6 +34,12 @@ Telegram MCP plugin (read-only access to your own Telegram account, see [edshav/
 /plugin install telegram --marketplace edshav/skills
 ```
 
+djinni plugin (scrapes a djinni.co job search into one Markdown file and analyses the postings, invoked as `/djinni:scrape <URL>`, see [edshav/djinni-scraper](https://github.com/edshav/djinni-scraper)):
+
+```
+/plugin install djinni --marketplace edshav/skills
+```
+
 `generate-tasks-json` and `mutation-analyzer` ship as separate opt-in plugins:
 
 ```
