@@ -22,10 +22,10 @@ Start with each skill's `README.md` for the overview, then `SKILL.md` for the ac
 
 ## Installation
 
-Claude Code plugin (ships `reader-test`):
+`reader-test` Claude Code plugin:
 
 ```
-/plugin install edshav --marketplace edshav/skills
+/plugin install reader-test --marketplace edshav/skills
 ```
 
 Telegram MCP plugin (read-only access to your own Telegram account, see [edshav/telegram-ai](https://github.com/edshav/telegram-ai)):

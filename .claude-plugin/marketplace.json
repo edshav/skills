@@ -8,7 +8,7 @@
   },
   "plugins": [
     {
-      "name": "edshav",
+      "name": "reader-test",
       "description": "Finds the errors in a spec, plan or estimate that its own author cannot see.",
       "source": "./",
       "strict": false,
