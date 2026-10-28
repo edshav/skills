@@ -40,6 +40,12 @@ djinni plugin (scrapes a djinni.co job search into one Markdown file and analyse
 /plugin install djinni --marketplace edshav/skills
 ```
 
+timelog plugin (hours from your Claude Code sessions per project directory, confirmed by you into a CSV you keep locally, invoked as `/timelog:timelog`, see [edshav/timelog](https://github.com/edshav/timelog)):
+
+```
+/plugin install timelog --marketplace edshav/skills
+```
+
 `generate-tasks-json` and `mutation-analyzer` ship as separate opt-in plugins:
 
 ```

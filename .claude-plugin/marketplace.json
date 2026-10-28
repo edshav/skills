@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "edshav",
-  "description": "Harness-agnostic skills for specs, issue planning and code-change tracing, plus a read-only Telegram plugin and a djinni.co job-search scraper.",
+  "description": "Harness-agnostic skills for specs, issue planning and code-change tracing, plus a read-only Telegram plugin, a djinni.co job-search scraper and a Claude Code time log.",
   "owner": {
     "name": "Eduard Shavyrko",
     "url": "https://github.com/edshav"
@@ -37,6 +37,11 @@
       "name": "djinni",
       "description": "Politely scrape a djinni.co job search into one Markdown file and analyse the postings.",
       "source": { "source": "github", "repo": "edshav/djinni-scraper" }
+    },
+    {
+      "name": "timelog",
+      "description": "Hours from your Claude Code sessions, per project directory, confirmed by you into a CSV time log.",
+      "source": { "source": "github", "repo": "edshav/timelog" }
     }
   ]
 }
