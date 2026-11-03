@@ -11,6 +11,7 @@ Each skill is harness- and LLM-agnostic. Drop the folder into your agent's skill
 | [`mutation-analyzer`](mutation-analyzer/)     | Turns the agent into an investigative staff engineer for **mutation-oriented** code analysis — "if I change X, what breaks, where does it silently corrupt, and where does it loudly fail?" Persists structured, code-grounded knowledge files under a `wiki/code-analysis/` directory. |
 | [`generate-tasks-json`](generate-tasks-json/) | Bulk-creates well-structured GitHub issues from a single JSON file, plus the **planning methodology** (contract-as-seam decomposition, two-level hierarchy, one Feature + two contract sides by default) that the agent applies when drafting that JSON.                                |
 | [`reader-test`](reader-test/)                 | Finds the errors in a spec, plan or estimate that its **own author cannot see**, by handing the file to readers who have nothing but the file — one reader per lens (executor, numbers, source fidelity, internal consistency, money/data risk), each forbidden the others' territory. |
+| [`find-skills`](find-skills/)                 | Discovers and installs agent skills from the open skills ecosystem (`npx skills`, [skills.sh](https://skills.sh/)). A verbatim copy of [vercel-labs/skills](https://github.com/vercel-labs/skills/tree/main/skills/find-skills), MIT; ships without evals.                              |
 
 Each skill ships with a generic `evals/evals.json` probing the rules it enforces — customize the placeholders to refer to real entities in your codebase and run with the eval harness of your choice.
 
@@ -51,6 +52,12 @@ timelog plugin (hours from your Claude Code sessions per project directory, conf
 ```
 /plugin install generate-tasks-json --marketplace edshav/skills
 /plugin install mutation-analyzer --marketplace edshav/skills
+```
+
+`find-skills` plugin (copied from [vercel-labs/skills](https://github.com/vercel-labs/skills), MIT):
+
+```
+/plugin install find-skills --marketplace edshav/skills
 ```
 
 Two common modes per skill, regardless of harness:

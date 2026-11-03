@@ -29,6 +29,13 @@
       "skills": ["./mutation-analyzer"]
     },
     {
+      "name": "find-skills",
+      "description": "Discovers and installs agent skills from the open skills ecosystem (npx skills, skills.sh). Copied from vercel-labs/skills, MIT.",
+      "source": "./",
+      "strict": false,
+      "skills": ["./find-skills"]
+    },
+    {
       "name": "telegram",
       "description": "Read-only Telegram for your own account: list, search and read chats and public channels.",
       "source": { "source": "github", "repo": "edshav/telegram-ai" }
