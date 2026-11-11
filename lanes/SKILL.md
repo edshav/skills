@@ -74,9 +74,9 @@ code and is kept out of git.
   model too. Effort stays at the default.
 - **Worktree.** One worktree per PR, on the branch and base the PR map names.
 - **Placement.** One session per lane, in a terminal multiplexer if you use one (e.g.
-  Herdr, tmux), in the repo's workspace or session. Its name is short and leads with the
-  lane (`b-sync`; the coordinator `coord`): sidebars and tab bars cut long names, and the
-  workspace already says the repo.
+  Herdr, tmux), in the repo's workspace or session. Its name starts with its most
+  meaningful part, the lane and its area (`b-sync-retry`; the coordinator `coord`):
+  sidebars and tab bars cut names from the end, and the workspace already says the repo.
 - **First prompt.** Filled in from [`brief.md`](brief.md).
 
 Per-PR steps, in the lane:
