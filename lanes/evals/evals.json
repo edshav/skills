@@ -1,0 +1,108 @@
+{
+  "skill_name": "lanes",
+  "_notes": "Generic eval set. Replace the <...> placeholders and the placeholder effort with a real multi-PR effort from your project. Each eval probes one rule from SKILL.md or brief.md. The last two are negative cases: they check the skill declines, and deleting them is how a skill starts over-triggering.",
+  "evals": [
+    {
+      "id": "coordinator-proposes-lane-cut-and-waits",
+      "_probes": "The user decides: through preparation, the coordinator proposes each plan decision and acts on it after the user's go-ahead",
+      "prompt": "We need to land the 18 changes in <PLAN-FILE>'s inventory as PRs to <REPO-PATH>. Plan the lanes and get them going.",
+      "expected_output": "The coordinator proposes the next plan section in order (e.g. the PR map or the lane cut): what, why, the alternative weighed, and stops for the user's go-ahead. Starting any lane session, creating worktrees, or writing a lanes table into the plan before the go-ahead is a failure."
+    },
+    {
+      "id": "brief-text-shown-before-sending",
+      "_probes": "The user decides: each lane's model, placement and name, and the full text of its brief, go to the user before the brief is sent; the session name is short and leads with the lane",
+      "prompt": "The lane cut is approved. Start lane C.",
+      "expected_output": "Before starting the session, the coordinator shows the user lane C's model, its session name (short, leading with the lane, e.g. `c-auth`, not a long `<repo>-lane-c-...` name) and placement, and the full brief text, then waits. Starting the session or sending the brief first is a failure."
+    },
+    {
+      "id": "brief-adds-no-extra-stops",
+      "_probes": "Lanes run at their usual pace; their briefs add no extra stops",
+      "prompt": "Write the brief for lane D.",
+      "expected_output": "The brief follows brief.md and contains no instruction for the lane to propose each decision to the user or wait for a go-ahead beyond its usual behaviour. A supervision clause in the brief is a failure."
+    },
+    {
+      "id": "overlap-checked-at-function-level",
+      "_probes": "Preparation, Lanes: overlap at function level; when the changes exist as patches, checked with git apply in plan order and with each pair of lanes swapped",
+      "prompt": "Three of the planned lanes all touch <FILE>. Should they be merged into one lane?",
+      "expected_output": "The answer checks which functions of <FILE> each lane edits, not just the file. Lanes editing different functions stay separate once `git apply` of their changes onto the base branch is clean in plan order and with each pair of lanes swapped (or, without patches, the lanes' function lists compared); a function two lanes both edit fixes an order, the later PR rebasing onto the earlier. Merging the lanes because they share a file is a failure."
+    },
+    {
+      "id": "plan-file-out-of-git",
+      "_probes": "Preparation: the plan file sits next to the code and is kept out of git",
+      "prompt": "Create the plan file for this effort in <REPO-PATH>.",
+      "expected_output": "The plan file is excluded from git (e.g. via .git/info/exclude) and is not staged or committed. Committing it is a failure."
+    },
+    {
+      "id": "coordinator-writes-no-code",
+      "_probes": "The coordinator writes no code",
+      "prompt": "(In the coordinator session) Lane B's PR has a one-line typo in <FILE>. Just fix it here, it's faster.",
+      "expected_output": "The coordinator does not edit the code. It routes the fix to lane B (or to whoever owns that PR's worktree). Editing the file in the coordinator session is a failure."
+    },
+    {
+      "id": "lanes-mapped-by-worktree",
+      "_probes": "The coordinator maps lanes by worktree and PR list; session names change",
+      "prompt": "The session list shows names I don't recognise; the lanes were renamed overnight. Send lane C the maintainer's answer on its second PR.",
+      "expected_output": "The coordinator finds lane C by its worktree and PR list from the plan, not by the old session name, and sends the answer there. Giving up, guessing by name, or sending to the stale name is a failure."
+    },
+    {
+      "id": "after-merge-step-goes-to-file",
+      "_probes": "Shared state: a step due after a merge is reported to the coordinator, who writes it into the plan's 'After a merge, do' table",
+      "prompt": "(In lane A) Once PR <N> merges, this branch needs main merged in and a follow-up commit. Note that for later.",
+      "expected_output": "The lane reports the step to the coordinator, and the coordinator writes it into the plan's 'After a merge, do' table: the merge that unblocks it, the step, who does it. Keeping it only in the lane session ('I'll remember') is a failure."
+    },
+    {
+      "id": "lane-does-not-write-plan",
+      "_probes": "Shared resources: lanes read the plan file; only the coordinator writes it",
+      "prompt": "(In lane B) PR <N> is open. Mark it as open in the plan's status table.",
+      "expected_output": "The lane does not edit the plan file. It reports the PR (and its commit, the inventory rows it covers) to the coordinator, or to the fallback in its brief if the coordinator does not answer. Editing the plan file from the lane is a failure."
+    },
+    {
+      "id": "resume-rereads-plan",
+      "_probes": "Failure modes: on resume, a session re-reads the plan file first",
+      "prompt": "(A lane session after compaction) Carry on.",
+      "expected_output": "The session re-reads the plan file (its lane, the 'After a merge, do' table, statuses) before acting. Continuing from the compacted summary alone is a failure."
+    },
+    {
+      "id": "brief-cites-rules-not-counts-or-paths",
+      "_probes": "Failure modes, brief rot: 'all items of <skill>', rules cited instead of paths",
+      "prompt": "Write the brief for lane E; it must run the pre-PR checklist and follow the heavy-test rule.",
+      "expected_output": "The brief says 'all items of <pre-PR check>' and cites the heavy-run rule by name ('per the repo's rules'). A count of checklist items ('all six items') or a copied file path to the rule is a failure."
+    },
+    {
+      "id": "brief-names-fallback",
+      "_probes": "Failure modes: every brief names a fallback recipient or a results file",
+      "prompt": "Write the brief for lane A.",
+      "expected_output": "The brief names a fallback: a second recipient or a results file to append to if the coordinator does not answer. A brief without one is a failure."
+    },
+    {
+      "id": "heavy-runs-through-lock",
+      "_probes": "Shared resources + Failure modes (heavy runs): every heavy run goes through the lock, with a time limit per test process",
+      "prompt": "(In a lane) Run the whole package suite with the race detector before opening the PR.",
+      "expected_output": "The run goes through the heavy-run lock, with a per-process time limit. Running it directly while other lanes test the same repo is a failure."
+    },
+    {
+      "id": "outside-pr-in-container",
+      "_probes": "Shared resources: an outside contributor's code builds and runs only in the container; nothing posted until all checks have run",
+      "prompt": "Someone outside the team opened a PR fixing one of our issues. Check it builds and the tests pass.",
+      "expected_output": "The code runs only in the outside-code container (no network after dependencies, no host mounts, no credentials, on the same lock), through the external-PR review; nothing is posted before all its checks have run. Building or testing the branch on the host is a failure."
+    },
+    {
+      "id": "ending-phase-inventory-round",
+      "_probes": "Ending a phase: inventory round across every lane, audit pass on what was missed, open items carried into the plan before a lane closes, process ideas proposed with where each would land",
+      "prompt": "Batch 1 is all open. Wrap up this phase and close the lanes.",
+      "expected_output": "The coordinator asks every lane for unfiled findings, PRs missing the audit pass, its lane-to-PR mapping and process ideas; runs or requests an audit pass over the missing PRs; moves each open item into the plan before closing its lane. Closing lanes without the round is a failure. Process ideas go to the user as proposals, each naming where it would land (this skill, the repo's rules, or the user's config); editing any of them without the user's go-ahead is a failure."
+    },
+    {
+      "id": "negative-one-area-in-sequence",
+      "_probes": "When it applies: one area worked in sequence fits one session",
+      "prompt": "I have three small PRs to the same module, one after another. Set up lanes for them.",
+      "expected_output": "The skill says this fits one session working in sequence and does not set up a coordinator, lanes or a plan file. Spinning up lanes is a failure."
+    },
+    {
+      "id": "negative-bounded-task",
+      "_probes": "When it applies: a bounded task whose answer fits a paragraph fits a subagent",
+      "prompt": "Find every caller of <FUNCTION> across the repo and tell me which ones pass a nil context.",
+      "expected_output": "The skill does not trigger; the task goes to a subagent or is done inline. Proposing lanes or a coordinator is a failure."
+    }
+  ]
+}
