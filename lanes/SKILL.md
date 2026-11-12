@@ -59,7 +59,8 @@ code and is kept out of git.
    already exist as patches, check with `git apply` onto the base branch, in plan order and
    with each pair of lanes swapped; otherwise compare the lanes' function lists. A
    function two lanes both edit fixes an order: the later PR rebases onto the earlier
-   one. The lanes table names each lane's functions, PR order and worktrees.
+   one. The lanes table names each lane's functions, PR order, worktrees and, once the
+   lane reports, its tab id.
 5. **Merge order**, and batches when the maintainer reviews in batches. Batch 1: every PR
    that stands on the base branch by itself. Batch n+1: PRs that build on a batch-n PR,
    started after the maintainer's pass on batch n so they take in the remarks.
@@ -74,9 +75,16 @@ code and is kept out of git.
   model too. Effort stays at the default.
 - **Worktree.** One worktree per PR, on the branch and base the PR map names.
 - **Placement.** One session per lane, in a terminal multiplexer if you use one (e.g.
-  Herdr, tmux), in the repo's workspace or session. Its name starts with its most
-  meaningful part, the lane and its area (`b-sync-retry`; the coordinator `coord`):
-  sidebars and tab bars cut names from the end, and the workspace already says the repo.
+  Herdr, tmux), in the repo's workspace or session. The tab is named `<lane> · <session name>`:
+  the lane first, because sidebars cut names from the end (`b · 6c`; the coordinator
+  `coord · da`). The tab gets the last segment of the session name once the session
+  runs; cross-session messages go to the full name. The workspace already says the repo.
+  The lane label names the code area loosely; the plan's PR list stays the authority. A
+  security or embargoed lane gets a neutral label (`sec`), never what it fixes. When a
+  lane's report arrives from a new session name, the coordinator renames the tab. It
+  finds the tab by the tab id the lane states in its first report and in its first
+  report after a restart. A resumed session does not notice a restart by itself: the
+  coordinator asks for the report when a lane's session name changes in the session list.
 - **First prompt.** Filled in from [`brief.md`](brief.md).
 
 Per-PR steps, in the lane:
@@ -99,7 +107,8 @@ Writes no code. It:
 - checks each reported PR against its inventory rows, and asks for an **audit pass**: the
   inventory marks what the PR actually landed.
 
-It maps lanes by worktree and PR list. Session names change; worktrees and PRs do not.
+It finds a lane by worktree and PR list; the tab name is only a label, and the tab id
+locates the tab. Session names change; worktrees and PRs do not.
 
 ## 4. Shared resources and state files
 

@@ -31,9 +31,10 @@ Rules you follow, per the repo's rules: heavy runs through the lock; outside cod
 the container; the embargo ledger on every amend, push or PR; every subagent call names
 its model.
 
-Report to the coordinator: each PR opened (the PR and its commit, the inventory rows it
-covers, open questions), a blocker, and any step due after a merge, which the coordinator
-writes into the plan's "After a merge, do" table.
+Report to the coordinator: your tab id (`$HERDR_TAB_ID` in Herdr)
+in your first report and after any restart; each PR opened (the PR and its commit, the
+inventory rows it covers, open questions), a blocker, and any step due after a merge,
+which the coordinator writes into the plan's "After a merge, do" table.
 
 Fallback: if the coordinator does not answer, send to <second recipient> or append to
 <results file>.

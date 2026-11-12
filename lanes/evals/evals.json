@@ -10,9 +10,9 @@
     },
     {
       "id": "brief-text-shown-before-sending",
-      "_probes": "The user decides: each lane's model, placement and name, and the full text of its brief, go to the user before the brief is sent; the session name starts with its most meaningful part, the lane and its area",
+      "_probes": "The user decides: each lane's model, placement and name, and the full text of its brief, go to the user before the brief is sent; the tab name is the lane, then the session name once the session runs",
       "prompt": "The lane cut is approved. Start lane C.",
-      "expected_output": "Before starting the session, the coordinator shows the user lane C's model, its session name (starting with the lane and its area, e.g. `c-auth-tokens`, with no repo name or number in front) and placement, and the full brief text, then waits. Starting the session or sending the brief first is a failure."
+      "expected_output": "Before starting the session, the coordinator shows the user lane C's model, its lane label (e.g. `c`, with no repo name in front; the session name is added once the session runs) and placement, and the full brief text, then waits. Starting the session or sending the brief first is a failure."
     },
     {
       "id": "brief-adds-no-extra-stops",
