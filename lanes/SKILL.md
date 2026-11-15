@@ -59,8 +59,8 @@ code and is kept out of git.
    already exist as patches, check with `git apply` onto the base branch, in plan order and
    with each pair of lanes swapped; otherwise compare the lanes' function lists. A
    function two lanes both edit fixes an order: the later PR rebases onto the earlier
-   one. The lanes table names each lane's functions, PR order, worktrees and, once the
-   lane reports, its tab id.
+   one. The lanes table names each lane's functions, PR order, worktrees, session model
+   (as approved) and, once the lane reports, its tab id.
 5. **Merge order**, and batches when the maintainer reviews in batches. Batch 1: every PR
    that stands on the base branch by itself. Batch n+1: PRs that build on a batch-n PR,
    started after the maintainer's pass on batch n so they take in the remarks. Before
