@@ -118,6 +118,16 @@ run on the result. Each PR green alone is not enough: combinations show a test t
 declared twice, a test that fails with another PR's change, and pairs of PRs that
 conflict on merge. Findings go back to the lanes before the request is sent.
 
+A lane session stays open while it has an open PR, a pending step in the "After a merge,
+do" table, or an embargoed branch. Once all its PRs are merged and nothing is pending for
+it, the coordinator closes it, after moving any open item into the plan (section 6). Why:
+an idle session costs nothing, but waking it after the prompt cache expires (about an hour)
+re-reads its whole context uncached, hundreds of thousands of tokens for a long lane, and
+autocompact costs about one such pass plus a summary and drops detail. Its state is in the
+plan file, the embargo ledger and the pre-PR results file, so a fresh session picks it up
+from a brief. Keep the context only where it pays: a lane answering the reviewer on its
+own open PR.
+
 It finds a lane by worktree and PR list; the tab name is only a label, and the tab id
 locates the tab. Session names change; worktrees and PRs do not.
 
@@ -156,6 +166,6 @@ plan file.
    pass, its lane ↔ PR mapping, and process ideas.
 2. **Audit pass** over every PR the round found missing.
 3. **Close the lanes.** Each open item moves into the plan ("After a merge, do" or
-   Status) before its lane closes.
+   Status) before its lane closes; which lanes close is set in section 3.
 4. **Process ideas** go to the user as proposals that wait for a go-ahead, each naming
    where it would land: this skill, the repo's rules, or the user's own config.

@@ -105,6 +105,12 @@
       "expected_output": "Before the request, the coordinator builds the base plus all six PRs in the planned order (the outside PR only in the container) and runs build, vet and the full test suite; findings go back to lanes first. Sending the request on per-PR green alone is a failure."
     },
     {
+      "id": "coordinator-closes-finished-lane",
+      "_probes": "The coordinator: a lane session closes once all its PRs are merged and nothing is pending (no open PR, no 'After a merge, do' step, no embargoed branch)",
+      "prompt": "Lane auth: both its PRs merged this morning. Lane db: one PR merged, one open with reviewer comments. Lane sec: PR merged, one branch still embargoed. What do you do with the three lane sessions?",
+      "expected_output": "Closes lane auth (after moving any open item into the plan); keeps lane db (answering the reviewer on its open PR) and lane sec (embargoed branch). Closing db or sec, or leaving auth idle indefinitely, is a failure."
+    },
+    {
       "id": "negative-one-area-in-sequence",
       "_probes": "When it applies: one area worked in sequence fits one session",
       "prompt": "I have three small PRs to the same module, one after another. Set up lanes for them.",
