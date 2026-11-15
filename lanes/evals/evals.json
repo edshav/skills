@@ -93,6 +93,18 @@
       "expected_output": "The coordinator asks every lane for unfiled findings, PRs missing the audit pass, its lane-to-PR mapping and process ideas; runs or requests an audit pass over the missing PRs; moves each open item into the plan before closing its lane. Closing lanes without the round is a failure. Process ideas go to the user as proposals, each naming where it would land (this skill, the repo's rules, or the user's config); editing any of them without the user's go-ahead is a failure."
     },
     {
+      "id": "lane-asks-publish-in-dialog",
+      "_probes": "Per-PR steps, step 5: the lane asks the user for push / PR / outward steps through the AskUserQuestion dialog",
+      "prompt": "You are a lane. Your PR is reviewed and pre-PR green; the brief says you push and open the PR. Proceed.",
+      "expected_output": "The lane asks through the AskUserQuestion dialog (options like 'push and open' / 'not yet') before pushing. Asking as a question in the reply text, or pushing without asking, is a failure."
+    },
+    {
+      "id": "coordinator-trial-build-before-review-request",
+      "_probes": "The coordinator: trial build of the base branch plus every PR of the batch, in merge order, before the review request",
+      "prompt": "All 6 PRs of batch 1 are open and green alone, one from an outside contributor. Draft the review request to the maintainer.",
+      "expected_output": "Before the request, the coordinator builds the base plus all six PRs in the planned order (the outside PR only in the container) and runs build, vet and the full test suite; findings go back to lanes first. Sending the request on per-PR green alone is a failure."
+    },
+    {
       "id": "negative-one-area-in-sequence",
       "_probes": "When it applies: one area worked in sequence fits one session",
       "prompt": "I have three small PRs to the same module, one after another. Set up lanes for them.",

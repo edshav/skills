@@ -63,7 +63,8 @@ code and is kept out of git.
    lane reports, its tab id.
 5. **Merge order**, and batches when the maintainer reviews in batches. Batch 1: every PR
    that stands on the base branch by itself. Batch n+1: PRs that build on a batch-n PR,
-   started after the maintainer's pass on batch n so they take in the remarks.
+   started after the maintainer's pass on batch n so they take in the remarks. Before
+   asking the maintainer to review a batch, the coordinator runs the trial build (section 3).
 6. **Review process.** Agreed with the client, if any, and the maintainer before the
    first PR: who reviews, who merges, who requests reviews.
 7. **"After a merge, do"** (section 4) and **Status**, empty at the start.
@@ -93,8 +94,11 @@ Per-PR steps, in the lane:
    the change.
 3. Run your review pipeline, plus every domain auditor whose area the diff touches.
 4. Run your pre-PR check and write its result to the pre-PR results file.
-5. Publish per the brief's "Who publishes": push and open the PR. A branch in the embargo
-   ledger waits for the go the ledger names.
+5. Publish per the brief's "Who publishes": push and open the PR. Ask the user for it
+   (and for any other outward step: a post to the code host, a message) through the
+   AskUserQuestion dialog, with options like "push and open" / "not yet", not as a
+   question in the reply text, where it gets lost in long output. A branch in the
+   embargo ledger waits for the go the ledger names.
 6. Report to the coordinator: the PR and its commit, the inventory rows it covers, any
    step due after a merge.
 
@@ -106,6 +110,13 @@ Writes no code. It:
 - drafts the client's and the maintainer's messages, for the user to send;
 - checks each reported PR against its inventory rows, and asks for an **audit pass**: the
   inventory marks what the PR actually landed.
+
+Before the review request for a batch, it makes the **trial build**: the base branch plus
+every PR of the batch, outside contributors' PRs included (their code only in the
+outside-code container), merged in the planned order; build, vet and the full test suite
+run on the result. Each PR green alone is not enough: combinations show a test type
+declared twice, a test that fails with another PR's change, and pairs of PRs that
+conflict on merge. Findings go back to the lanes before the request is sent.
 
 It finds a lane by worktree and PR list; the tab name is only a label, and the tab id
 locates the tab. Session names change; worktrees and PRs do not.
