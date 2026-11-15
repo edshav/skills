@@ -26,10 +26,10 @@ test that fails without the change, then the change; your review pipeline and <d
 auditors>; all items of <pre-PR check>, its result written to <pre-PR results file>;
 publish per "Who publishes".
 
-Who publishes: <you push and open the PR | the coordinator does>. You ask the user for it, and
-for any other outward step, through the AskUserQuestion dialog ("push and open" / "not
-yet"), not in the reply text. A branch in the embargo
-ledger waits for the go the ledger names.
+Who publishes: <you push and open the PR | the coordinator does>, per the lanes skill's
+per-PR steps: push and PR in one command; a hook's prompt before a push or a post is the
+user's word; without such a hook, the AskUserQuestion dialog, not the reply text. A branch
+in the embargo ledger waits for the go the ledger names.
 
 Rules you follow, per the repo's rules: heavy runs through the lock; outside code only in
 the container; the embargo ledger on every amend, push or PR; every subagent call names

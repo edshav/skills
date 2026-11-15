@@ -98,14 +98,25 @@ Per-PR steps, in the lane:
 2. TDD where the change alters behaviour: a test that fails without the change, then
    the change.
 3. Run your review pipeline, plus every domain auditor whose area the diff touches.
-4. Run your pre-PR check and write its result to the pre-PR results file.
-5. Publish per the brief's "Who publishes": push and open the PR. Ask the user for it
-   (and for any other outward step: a post to the code host, a message) through the
+4. Run your pre-PR check and write its result to the pre-PR results file. Before handing
+   the check to its grader, the author walks the check's mutation categories itself, so the
+   grader confirms rather than finds. A commit made after the check gets its diff read for
+   leftovers (debug output, stray files) before the push.
+5. Publish per the brief's "Who publishes": push and open the PR in one command
+   (`git push … && gh pr create …`). Where a hook asks before a push or a post, its prompt
+   is the user's word: say in two or three lines what goes out (branch, head, PR or post),
+   then run the command, with no dialog of your own. Without such a hook, ask for it (and
+   for any other outward step: a post to the code host, a message) through the
    AskUserQuestion dialog, with options like "push and open" / "not yet", not as a
-   question in the reply text, where it gets lost in long output. A branch in the
-   embargo ledger waits for the go the ledger names.
+   question in the reply text, where it gets lost in long output. A PR body states what a
+   test checks and what the pre-PR check needs, not reasoning about edge modes; text for
+   the code host goes through the review pipeline once, after the code has settled. A
+   branch in the embargo ledger waits for the go the ledger names.
 6. Report to the coordinator: the PR and its commit, the inventory rows it covers, any
    step due after a merge.
+
+A gap in tests the user has accepted on one PR may be accepted on a like PR without asking
+again; the lane names it in its report.
 
 **Scale the pipeline by risk.** The plan assigns each PR a tier; the brief names it.
 - *Comments, docs or tests only:* the review pipeline once; from the pre-PR check only the
@@ -122,7 +133,8 @@ read the same diff and mostly overlap.
 
 Writes no code. It:
 - keeps the plan file: statuses and the "After a merge, do" table, from lane reports;
-- routes briefs to lanes and answers between them;
+- routes briefs to lanes and answers between them, taking branch names and heads for a
+  brief from git or the code host, never from memory;
 - drafts the client's and the maintainer's messages, for the user to send;
 - checks each reported PR against its inventory rows, and asks for an **audit pass**: the
   inventory marks what the PR actually landed.
@@ -136,7 +148,12 @@ conflict on merge. Findings go back to the lanes before the request is sent.
 
 A lane session stays open while it has an open PR, a pending step in the "After a merge,
 do" table, or an embargoed branch. Once all its PRs are merged and nothing is pending for
-it, the coordinator closes it, after moving any open item into the plan (section 6). Why:
+it, the coordinator closes it, after moving any open item into the plan (section 6).
+The coordinator checks this after each merge of a lane's PR and whenever a lane reports
+nothing open. Before closing, it asks the lane the close-out questions: findings not
+filed, steps pending after a merge, what only its context holds, what slowed it and what
+it would change. Answers on code and tasks go into the plan; answers on process go into
+the retrospective file, as proposals for the user. Why:
 an idle session costs nothing, but waking it after the prompt cache expires (about an hour)
 re-reads its whole context uncached, hundreds of thousands of tokens for a long lane, and
 autocompact costs about one such pass plus a summary and drops detail. Its state is in the
@@ -169,6 +186,7 @@ Lanes read the plan file; only the coordinator writes it.
 | Embargo ledger, out of git | unpublished security branches: branch, head, worktree, who gives the go | the owning lane, on every amend, push or PR |
 | Pre-PR results file | each PR's pre-PR check result and the commit it ran on | the lane, after each run |
 | Heavy-run lock | a script every heavy run goes through: race-detector runs, whole-package suites, long loops | each session, per run |
+| Retrospective file | process notes from lane close-outs and reports; proposals waiting for the user | the coordinator |
 | Outside-code container | the only place an outside contributor's code builds and runs: no network after dependencies, no host mounts, no credentials, queued on the same lock | whoever reviews the outside PR |
 
 The plan holds current state: the lanes table, the "After a merge, do" table and open
@@ -192,10 +210,12 @@ until all its checks have run.
 Done when every lane has answered the inventory round and every open item sits in the
 plan file.
 
-1. **Inventory round.** Ask every lane for its unfiled findings, its PRs missing the audit
-   pass, its lane ↔ PR mapping, and process ideas.
-2. **Audit pass** over every PR the round found missing.
+1. **Inventory round.** Ask every lane still open the close-out questions (section 3) and
+   its lane ↔ PR mapping.
+2. **Audit pass** over every PR without one. The coordinator tracks this from the PR list;
+   lanes do not.
 3. **Close the lanes.** Each open item moves into the plan ("After a merge, do" or
    Status) before its lane closes; which lanes close is set in section 3.
-4. **Process ideas** go to the user as proposals that wait for a go-ahead, each naming
-   where it would land: this skill, the repo's rules, or the user's own config.
+4. **Process ideas** from the retrospective file go to the user as proposals that wait for
+   a go-ahead, each naming where it would land: this skill, the repo's rules, or the user's
+   own config.
