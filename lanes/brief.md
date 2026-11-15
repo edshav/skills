@@ -19,6 +19,8 @@ Boundaries:
   coordinator.
 - You do not publish <what: messages to the client or maintainer, comments on others' PRs>.
 
+Risk tier: <tier from the plan>; it sets the review pipeline and pre-PR items.
+
 Per PR, in order: read its inventory rows; TDD where the change alters behaviour: a
 test that fails without the change, then the change; your review pipeline and <domain
 auditors>; all items of <pre-PR check>, its result written to <pre-PR results file>;
@@ -36,7 +38,9 @@ its model.
 Report to the coordinator: your tab id (`$HERDR_TAB_ID` in Herdr)
 in your first report and after any restart; each PR opened (the PR and its commit, the
 inventory rows it covers, open questions), a blocker, and any step due after a merge,
-which the coordinator writes into the plan's "After a merge, do" table.
+which the coordinator writes into the plan's "After a merge, do" table. Detail goes to
+<results file>; the message is 5–8 lines: the file path, the new head, what needs a
+decision.
 
 Fallback: if the coordinator does not answer, send to <second recipient> or append to
 <results file>.

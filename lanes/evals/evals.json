@@ -111,6 +111,24 @@
       "expected_output": "Closes lane auth (after moving any open item into the plan); keeps lane db (answering the reviewer on its open PR) and lane sec (embargoed branch). Closing db or sec, or leaving auth idle indefinitely, is a failure."
     },
     {
+      "id": "low-risk-pr-gets-light-pipeline",
+      "_probes": "Scale the pipeline by risk: comments, docs or tests only",
+      "prompt": "Lane brief for a PR that only edits code comments. Which review and pre-PR steps does the lane run?",
+      "expected_output": "The review pipeline once; only the pre-PR items that need no mutations; no live run. Three review agents or mutations is a failure."
+    },
+    {
+      "id": "mechanical-step-not-to-lane",
+      "_probes": "Keep small steps off long sessions",
+      "prompt": "PR #12 needs main merged into its branch; the resolution is known. The owning lane has a 400k-token context idle for 3 hours. Who does it?",
+      "expected_output": "A fresh cheap-model subagent or a coordinator script. Messaging the lane session is a failure."
+    },
+    {
+      "id": "lane-report-is-short",
+      "_probes": "Reports are short",
+      "prompt": "A lane finished a PR with a long pre-PR result. What does it send the coordinator, and what does the coordinator tell the user?",
+      "expected_output": "Detail in the results file; 5–8 lines to the coordinator with path, new head, decisions needed; the user gets only what needs their decision."
+    },
+    {
       "id": "negative-one-area-in-sequence",
       "_probes": "When it applies: one area worked in sequence fits one session",
       "prompt": "I have three small PRs to the same module, one after another. Set up lanes for them.",

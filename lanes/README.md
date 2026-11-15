@@ -29,7 +29,7 @@ onto released versions, through many small PRs to a repo someone else maintains.
    spec, a PR map (inventory row → PR → branch → commit), lanes cut by code area with
    overlap checked at function level, merge order (and batches), and the review process
    agreed with the client, if any, and the maintainer.
-2. **Starting a lane.** A model per lane, a worktree and branch per PR, a named session in
+2. **Starting a lane.** A model per lane and per task, a risk tier per PR that scales the pipeline, a worktree and branch per PR, a named session in
    a terminal multiplexer, and a first prompt from [`brief.md`](brief.md).
 3. **The coordinator.** Writes no code: keeps the plan and statuses, routes briefs and
    answers, drafts the client's and maintainer's messages, checks each PR against its

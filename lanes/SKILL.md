@@ -71,9 +71,14 @@ code and is kept out of git.
 
 ## 2. Starting a lane
 
-- **Model.** The strongest model for lanes that touch money, consensus, keys or judgement
-  calls; a cheaper one for mechanical checks. Every subagent call inside a lane names its
-  model too. Effort stays at the default.
+- **Model, per lane and per task.** The strongest model for the lane session itself when it
+  touches money, consensus, keys or judgement calls. Inside a lane, each subagent call names
+  its model and gets the cheapest one that fits: the strongest for the first grade of
+  judgement items (tests, mutations, money logic) and for fact-checking a review text with
+  technical claims; a cheaper one for mechanical checks, re-grades after a small fix, trial
+  builds and fact-checking a short text (a one-line closing comment). Effort stays at the
+  default. The coordinator stays on the strongest model: it catches errors across PRs, and
+  it saves by taking fewer, shorter turns, not by a cheaper model.
 - **Worktree.** One worktree per PR, on the branch and base the PR map names.
 - **Placement.** One session per lane, in a terminal multiplexer if you use one (e.g.
   Herdr, tmux), in the repo's workspace or session. The tab is named `<lane> · <session name>`:
@@ -102,6 +107,17 @@ Per-PR steps, in the lane:
 6. Report to the coordinator: the PR and its commit, the inventory rows it covers, any
    step due after a merge.
 
+**Scale the pipeline by risk.** The plan assigns each PR a tier; the brief names it.
+- *Comments, docs or tests only:* the review pipeline once; from the pre-PR check only the
+  items that need no mutations (stand-alone, consequences, overlap); no live run.
+- *Logic without money, consensus or keys:* the full review pipeline and the full pre-PR
+  check; no live run unless sync or restart behaviour changes.
+- *Money, consensus or keys:* everything: the full review pipeline, the full pre-PR check,
+  every domain auditor, the live run.
+
+Below the top tier, one combined review agent replaces the separate review agents: they
+read the same diff and mostly overlap.
+
 ## 3. The coordinator
 
 Writes no code. It:
@@ -128,6 +144,16 @@ plan file, the embargo ledger and the pre-PR results file, so a fresh session pi
 from a brief. Keep the context only where it pays: a lane answering the reviewer on its
 own open PR.
 
+**Keep small steps off long sessions.** Waking a lane after the prompt cache expires
+re-reads its whole context uncached. A mechanical step (merging the base into a PR with a
+known resolution, waiting for CI, rerunning a known command) goes to a fresh cheap-model
+subagent or a coordinator script, not to a lane session. A lane runs /clear between
+unrelated tasks and resumes from the plan file and its brief.
+
+**Reports are short.** A lane writes the detail to its results file and sends the
+coordinator 5–8 lines: the file path, the new head, and what needs a decision. The
+coordinator passes the user only what needs their decision.
+
 It finds a lane by worktree and PR list; the tab name is only a label, and the tab id
 locates the tab. Session names change; worktrees and PRs do not.
 
@@ -144,6 +170,10 @@ Lanes read the plan file; only the coordinator writes it.
 | Pre-PR results file | each PR's pre-PR check result and the commit it ran on | the lane, after each run |
 | Heavy-run lock | a script every heavy run goes through: race-detector runs, whole-package suites, long loops | each session, per run |
 | Outside-code container | the only place an outside contributor's code builds and runs: no network after dependencies, no host mounts, no credentials, queued on the same lock | whoever reviews the outside PR |
+
+The plan holds current state: the lanes table, the "After a merge, do" table and open
+items. The coordinator moves finished history to an archive file next to it, so each resume
+re-reads a short plan.
 
 An outside contributor's PR goes through your external-PR review, and nothing is posted
 until all its checks have run.
