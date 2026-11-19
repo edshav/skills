@@ -13,6 +13,7 @@ Each skill is harness- and LLM-agnostic. Drop the folder into your agent's skill
 | [`reader-test`](reader-test/)                 | Finds the errors in a spec, plan or estimate that its **own author cannot see**, by handing the file to readers who have nothing but the file — one reader per lens (executor, numbers, source fidelity, internal consistency, money/data risk), each forbidden the others' territory. |
 | [`lanes`](lanes/)                             | Runs a multi-PR effort as one **coordinator** session that writes no code plus parallel **lane** sessions in their own worktrees: a plan file with the PR map and function-level lane cut, a brief template, and the state that would die with a session kept in files. |
 | [`find-skills`](find-skills/)                 | Discovers and installs agent skills from the open skills ecosystem (`npx skills`, [skills.sh](https://skills.sh/)). A verbatim copy of [vercel-labs/skills](https://github.com/vercel-labs/skills/tree/main/skills/find-skills), MIT; ships without evals.                              |
+| [`receiving-code-review`](receiving-code-review/) | Makes the agent verify review feedback against the code before applying it, and push back with technical reasoning instead of performative agreement. A verbatim copy of [obra/superpowers](https://github.com/obra/superpowers/tree/main/skills/receiving-code-review), MIT; ships without evals. |
 
 Each skill ships with a generic `evals/evals.json` probing the rules it enforces — customize the placeholders to refer to real entities in your codebase and run with the eval harness of your choice.
 
@@ -65,6 +66,12 @@ timelog plugin (hours from your Claude Code sessions per project directory, conf
 
 ```
 /plugin install find-skills --marketplace edshav/skills
+```
+
+`receiving-code-review` plugin (copied from [obra/superpowers](https://github.com/obra/superpowers), MIT):
+
+```
+/plugin install receiving-code-review --marketplace edshav/skills
 ```
 
 Two common modes per skill, regardless of harness:

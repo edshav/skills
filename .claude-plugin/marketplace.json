@@ -43,6 +43,13 @@
       "skills": ["./find-skills"]
     },
     {
+      "name": "receiving-code-review",
+      "description": "Verifies code review feedback against the code before applying it, with technical pushback instead of performative agreement. Copied from obra/superpowers, MIT.",
+      "source": "./",
+      "strict": false,
+      "skills": ["./receiving-code-review"]
+    },
+    {
       "name": "telegram",
       "description": "Read-only Telegram for your own account: list, search and read chats and public channels.",
       "source": { "source": "github", "repo": "edshav/telegram-ai" }
