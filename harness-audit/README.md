@@ -1,12 +1,13 @@
 # harness-audit
 
-A reusable instruction module for AI agents that audits a project's Claude Code harness
-against a catalogue of agentic-engineering ideas, proposes at most 7 ranked changes, and
-stops for you to pick.
+A reusable instruction module for AI agents that audits a project's agent harness (Claude
+Code, Codex, Cursor or similar) against a catalogue of agentic-engineering ideas, proposes at
+most 7 ranked changes, and stops for you to pick.
 
 Packaged in the [SKILL format](https://agentskills.io/specification) (YAML frontmatter +
-Markdown body). The audit method is harness-agnostic, but the catalogue maps every idea to
-a Claude Code mechanism, so it pays off most in Claude Code projects.
+Markdown body), harness- and LLM-agnostic. The catalogue maps each idea to a Claude Code
+mechanism as a worked example; in another harness the audit maps it to that harness's
+equivalent. See [Harness requirements](#harness-requirements).
 
 ---
 
@@ -16,15 +17,16 @@ You want to know what in a project could run without you next: which recurring t
 natural trigger, where work stalls waiting for you to start it, which agents hold more tools
 than their role needs, whether you can see what an unattended run did.
 
-Not for a code review, a repo-wide code quality audit, a single-file change, or general Claude
-Code automation recommendations or first-time setup.
+Not for a code review, a repo-wide code quality audit, a single-file change, or general
+automation recommendations or first-time setup of an agent tool.
 
 ## What it does
 
 1. Reads [`ideas.md`](ideas.md): 15 ideas, the course's own caveats and nine audit
    questions, distilled from the "Tiny Software Factories" course and a companion video.
-2. Inventories the harness read-only: `CLAUDE.md` / `AGENTS.md`, `.claude/`, CI, scripts,
-   what already runs unattended.
+2. Inventories the harness read-only: agent instruction files (`CLAUDE.md`, `AGENTS.md`,
+   Cursor rules and the like), harness config folders, CI, scripts, what already runs
+   unattended.
 3. Finds where the human is the bottleneck from evidence in the repo: `git log`, TODO
    clusters, manual steps in docs, recurring commits, and issues and PRs if `gh` works.
 4. Answers the nine questions with evidence, then proposes at most 7 changes in a table
@@ -39,10 +41,20 @@ Code automation recommendations or first-time setup.
   proposal has to point at something in this repo that shows the need.
 - **Cap of 7.** A short ranked list gets acted on; a long one gets skimmed.
 - **Existing mechanisms first.** A cron prompt calling an existing skill beats new machinery.
-- **The project's `CLAUDE.md` wins** over the catalogue where they conflict.
+- **The project's own agent instructions win** (`CLAUDE.md`, `AGENTS.md` or equivalent) over
+  the catalogue where they conflict.
 - **Approval point and narrow tools** for anything unattended that touches production,
   money, user data or outside services.
 - **Ideas, not the product.** The course builds a web app; the skill does not recreate it.
+
+## Harness requirements
+
+- An agent that can read the repo and run read-only shell commands (`git log`, `grep`).
+- Optional: `gh` for issues and PRs as evidence.
+- The audit reads whatever agent instruction files and config the project has; it needs no
+  particular harness. Proposals name mechanisms of the harness the project uses (a scheduler,
+  subagents, hooks, permission rules); where that harness has no equivalent, the proposal says
+  so.
 
 ## Files in this repo
 
@@ -63,8 +75,14 @@ Claude Code plugin:
 
 ### Native SKILL install (SKILL-aware harnesses)
 
-Copy the `harness-audit/` folder into your agent's skills directory, per project
-(`<repo>/.claude/skills/harness-audit/`) or user-global (`~/.claude/skills/harness-audit/`).
+Copy the `harness-audit/` folder into your agent's skills directory:
+
+| Harness     | Project scope                                     | User scope                         |
+| ----------- | ------------------------------------------------- | ---------------------------------- |
+| Claude Code | `<your-repo>/.claude/skills/harness-audit/`       | `~/.claude/skills/harness-audit/`  |
+| Codex       | `<your-repo>/.agents/skills/harness-audit/`       | `~/.agents/skills/harness-audit/`  |
+| Other       | Whatever directory your harness reads skills from | Same, user-global location         |
+
 Keep `ideas.md` next to `SKILL.md`; the skill reads it by relative path.
 
 ### Instruction-surface install (everything else)
@@ -76,7 +94,8 @@ the agent can read it, adjusting the pointer if the path differs.
 
 Fires on "audit the harness", "what can run without me", "improve our Claude Code setup
 with agentic ideas", or `/harness-audit`. Does not fire on a code review, a repo-wide code
-quality audit, a single-file change, or general automation recommendations or first-time setup.
+quality audit, a single-file change, or general automation recommendations or first-time setup
+of an agent tool.
 
 ## License
 

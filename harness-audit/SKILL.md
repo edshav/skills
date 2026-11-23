@@ -1,27 +1,33 @@
 ---
 name: harness-audit
 description: >
-  Use when the user wants a project's Claude Code harness audited against agentic-engineering
-  ideas: proactive triggers, near-loop decision points, specialised subagents, damage control,
-  observability. Triggers on "audit the harness", "what can run without me", "improve our
-  Claude Code setup with agentic ideas", "/harness-audit". DO NOT trigger for a code review, a
-  repo-wide code quality audit, a single-file change, or general Claude Code automation
-  recommendations or first-time setup.
+  Use when the user wants a project's agent harness (Claude Code, Codex, Cursor or similar)
+  audited against agentic-engineering ideas: proactive triggers, near-loop decision points,
+  specialised subagents, damage control, observability. Triggers on "audit the harness",
+  "what can run without me", "improve our Claude Code setup with agentic ideas",
+  "/harness-audit". DO NOT trigger for a code review, a repo-wide code quality audit, a
+  single-file change, or general automation recommendations or first-time setup of an agent
+  tool.
 license: MIT
 ---
 
 # Harness audit
 
-Find which ideas from [`ideas.md`](ideas.md) would pay off in this project's Claude Code
+Find which ideas from [`ideas.md`](ideas.md) would pay off in this project's agent
 harness, and propose a short ranked list of changes. This is an audit: change nothing until
 the user picks.
 
 ## Steps
 
-1. Read [`ideas.md`](ideas.md) in full. It is the only source of ideas.
+1. Read [`ideas.md`](ideas.md) in full. It is the only source of ideas. Its mechanism lines
+   name Claude Code features. The project's harness is the one its instruction files and
+   config folders are written for, not the agent running the audit. When that is another
+   harness, map each idea to its equivalent, and write "no equivalent" in the proposal row or
+   the idea's "Not now" line where it has none.
 2. Inventory the current harness, read-only:
-   - every `CLAUDE.md` / `AGENTS.md` in the repo, and `.claude/` (agents, skills, commands,
-     hooks, `settings.json`);
+   - every agent instruction file in the repo (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, Cursor
+     rules, Copilot instructions) and each harness's config folder (`.claude/`, `.codex/`,
+     `.cursor/`, `.github/` agent files or similar: agents, skills, commands, hooks, settings);
    - automation around it: CI config, `Makefile` / package scripts, dev and deploy scripts,
      test commands;
    - what already runs unattended (scheduled jobs, bots, CI checks).
@@ -37,10 +43,12 @@ the user picks.
 
 - A proposal needs evidence of the need in this repo. An idea that merely sounds good is not
   one; list it under "Not now" with one line.
-- Prefer what the project and Claude Code already have (existing scripts, skills, agents,
+- Prefer what the project and its harness already have (existing scripts, skills, agents,
   hooks) over new machinery. The smallest version that does the job.
-- Do not recreate the Tiny Software Factories (TSF) web app or its UI. Take the ideas, not the product.
-- Follow this project's own `CLAUDE.md` rules where they conflict with `ideas.md`.
+- Do not recreate the Tiny Software Factories (TSF) web app or its UI. Take the ideas, not
+  the product.
+- Follow this project's own agent instructions (`CLAUDE.md`, `AGENTS.md` or equivalent) where
+  they conflict with `ideas.md`.
 - Anything that acts unattended on production, money, user data or outside services needs an
   approval point in the proposal (idea 3) and narrow tools (idea 8).
 - Mark guesses as guesses.
