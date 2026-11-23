@@ -2,8 +2,9 @@
 
 Distilled from four YouTube videos: the "Tiny Software Factories" (TSF) course, lessons 1–3, and
 the companion video "ELITE Agentic Engineers Are LEAVING THE LOOP". Sales pitch, filler and the
-course's web UI specifics are dropped. Each idea maps to the closest Claude Code mechanism. Use
-this as a checklist when auditing a project's harness.
+course's web UI specifics are dropped. Each idea maps to the closest Claude Code mechanism, as a
+worked example; in another harness, use its equivalent. Use this as a checklist when auditing a
+project's harness.
 
 ## Core thesis
 
