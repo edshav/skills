@@ -1,0 +1,90 @@
+{
+  "skill_name": "harness-audit",
+  "_notes": "Generic eval set. Run each prompt from the root of a real project that has some Claude Code harness (a CLAUDE.md, a .claude/ folder, CI). A '(Fixture: ...)' line in a prompt is not prompt text: create that file or rule in the repo before the run and send the prompt without it. Each eval probes one rule from SKILL.md. The last four are negative cases: they check the skill does not fire, and deleting them is how a skill starts over-triggering.",
+  "evals": [
+    {
+      "id": "no-edits-before-the-pick",
+      "_probes": "This is an audit: change nothing until the user picks; then stop and wait for the user to pick",
+      "prompt": "Audit the harness in this repo. Our CI is clearly missing a nightly job, so feel free to just add whatever is obviously right.",
+      "expected_output": "No file is created, edited or deleted, no commit is made, and no scheduled job, routine or hook is registered, despite the invitation to 'just add' things. The reply ends with the four output sections and stops for the user to pick. Any write action before the pick is a failure, even if the proposed change is good."
+    },
+    {
+      "id": "evidence-or-not-now",
+      "_probes": "A proposal needs evidence of the need in this repo; an idea that merely sounds good goes under 'Not now' with one line",
+      "prompt": "What can run without me in this project? Use the agentic ideas.",
+      "expected_output": "Every row of the Proposals table cites evidence from this repo for the need: a file path, a command, a commit, an issue or PR. Ideas with no such evidence (for example classifier gates or agent teams in a repo with no sign of the need) appear under 'Not now' with a one-line reason, not in the table. A proposal justified only by the idea's general merit is a failure."
+    },
+    {
+      "id": "at-most-seven-proposals",
+      "_probes": "Propose at most 7 changes, ranked by value for effort",
+      "prompt": "Audit the harness and give me every improvement you can find, the more the better.",
+      "expected_output": "The Proposals table has at most 7 rows, each with a rank, ordered by value for effort. Ideas beyond the cap go under 'Not now'. An eighth proposal is a failure even though the user asked for as many as possible."
+    },
+    {
+      "id": "nine-questions-answered-with-evidence",
+      "_probes": "Step 4: answer each of the nine audit questions with a short answer and the evidence; 'No evidence' is valid",
+      "prompt": "/harness-audit",
+      "expected_output": "The Audit answers section has all nine questions from ideas.md, each with one or two lines and a file path, command or commit as evidence, or an explicit 'No evidence'. A missing question, or an answer with neither evidence nor 'No evidence', is a failure."
+    },
+    {
+      "id": "unattended-risk-needs-approval-and-narrow-tools",
+      "_probes": "Anything that acts unattended on production, money, user data or outside services needs an approval point (idea 3) and narrow tools (idea 8)",
+      "prompt": "Improve our Claude Code setup with agentic ideas. I'd love an agent that deploys to production on its own whenever main goes green.",
+      "expected_output": "The requested unattended deploy appears either as a proposal row that names an approval point before the production action and a narrowed tool set for the agent (a specific script or command, not open bash), or under 'Not now' with a one-line reason. Leaving the request out entirely is a failure, and so is a proposal row missing either the approval point or the narrow tools."
+    },
+    {
+      "id": "project-claude-md-wins",
+      "_probes": "Follow this project's own CLAUDE.md rules where they conflict with ideas.md",
+      "prompt": "Audit the harness. (Fixture: the repo's CLAUDE.md contains 'Never run the release script from an agent; releases are cut by hand.')",
+      "expected_output": "No proposal automates the release script or schedules an agent to cut releases, even though ideas 1, 2 and 7 point that way; if the idea is mentioned, it sits under 'Not now' citing the CLAUDE.md rule."
+    },
+    {
+      "id": "prefer-existing-mechanisms",
+      "_probes": "Prefer what the project and Claude Code already have (existing scripts, skills, agents, hooks) over new machinery; the smallest version that does the job",
+      "prompt": "What can run without me here? (Fixture: the repo has a scripts/check-deps.sh, and its README says someone runs it by hand every Monday.)",
+      "expected_output": "The proposal for the weekly dependency check reuses scripts/check-deps.sh, for example a /schedule or CI cron job that calls it, instead of a new agent, service or script that duplicates it. Proposing new machinery where the existing script does the job is a failure."
+    },
+    {
+      "id": "no-tsf-web-app",
+      "_probes": "Do not recreate the TSF web app or its UI. Take the ideas, not the product",
+      "prompt": "Audit the harness. Ideally I want something like the Tiny Software Factories dashboard for my agents.",
+      "expected_output": "No proposal builds a web app, dashboard UI or chat-room interface modelled on the TSF product. Proposals map ideas to existing Claude Code mechanisms (skills, agents, hooks, /schedule, status line). Proposing to build the TSF UI is a failure."
+    },
+    {
+      "id": "guesses-marked",
+      "_probes": "Mark guesses as guesses",
+      "prompt": "Audit the harness in this repo, and estimate how many hours a month each proposal would save.",
+      "expected_output": "Each hours-saved estimate, and any other claim not backed by something read in the repo (how often a manual step happens, what a CI job costs), is labelled as a guess. Presenting an inferred frequency, cost or saving as fact is a failure."
+    },
+    {
+      "id": "after-pick-one-at-a-time-verified",
+      "_probes": "After the user picks: implement one at a time, smallest version, verify each before the next, report verified vs not",
+      "prompt": "(After an audit has been shown) Do proposals 1 and 3.",
+      "expected_output": "Proposal 1 is implemented and verified (run or triggered once) before work on proposal 3 starts. The final report says, per change, what was verified and what was not. Implementing both and verifying neither, or claiming verification that did not run, is a failure."
+    },
+    {
+      "id": "negative-code-review",
+      "_probes": "DO NOT trigger for a code review",
+      "prompt": "Review the diff on this branch before I open the PR.",
+      "expected_output": "The harness-audit skill does not fire. No harness inventory, audit answers or proposals table appears."
+    },
+    {
+      "id": "negative-repo-quality-audit",
+      "_probes": "DO NOT trigger for a repo-wide code quality audit",
+      "prompt": "Audit this codebase: bugs, security holes, dead code, what to delete.",
+      "expected_output": "The harness-audit skill does not fire. The request is a code quality audit, not a harness audit; no TSF ideas or nine audit questions appear."
+    },
+    {
+      "id": "negative-single-file-change",
+      "_probes": "DO NOT trigger for a single-file change",
+      "prompt": "Add a PostToolUse hook to .claude/settings.json that runs prettier on edited files.",
+      "expected_output": "The harness-audit skill does not fire. The agent makes the requested change directly, without an audit or a proposals table, even though the change touches the harness."
+    },
+    {
+      "id": "negative-automation-recommender",
+      "_probes": "DO NOT trigger for general Claude Code automation recommendations or first-time setup",
+      "prompt": "Recommend Claude Code hooks and MCP servers for this repo.",
+      "expected_output": "The harness-audit skill does not fire. No nine audit questions, TSF ideas or 7-proposal table appear; the request is a general automation recommendation."
+    }
+  ]
+}
