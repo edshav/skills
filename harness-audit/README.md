@@ -26,9 +26,13 @@ automation recommendations or first-time setup of an agent tool.
    questions, distilled from the "Tiny Software Factories" course and a companion video.
 2. Inventories the harness read-only: agent instruction files (`CLAUDE.md`, `AGENTS.md`,
    Cursor rules and the like), harness config folders, CI, scripts, what already runs
-   unattended.
-3. Finds where the human is the bottleneck from evidence in the repo: `git log`, TODO
-   clusters, manual steps in docs, recurring commits, and issues and PRs if `gh` works.
+   unattended. Where those files route work to another place (sessions they hand off to, a
+   folder that answers questions, a shared decision record), it reads that place's
+   instruction files (or the record itself) too, one hop; a path cited only for reference is
+   left out.
+3. Finds where the human is the bottleneck from evidence in the repo or a linked part: `git
+   log`, TODO clusters, manual steps in docs, recurring commits, and issues and PRs if `gh`
+   works.
 4. Answers the nine questions with evidence, then proposes at most 7 changes in a table
    (idea #, change, files, effort, value, risk, how we'd know it works), plus a "Not now" list.
 5. Stops. After you pick, implements the picks one at a time and verifies each.
@@ -38,7 +42,8 @@ automation recommendations or first-time setup of an agent tool.
 - **Read-only until the pick.** An audit that edits as it goes makes you review changes you
   never chose. The skill ends on a decision point instead.
 - **Evidence or "Not now".** Every idea in the catalogue sounds good in the abstract. A
-  proposal has to point at something in this repo that shows the need.
+  proposal has to point at something in this repo, or in a linked part it read, that shows
+  the need.
 - **Cap of 7.** A short ranked list gets acted on; a long one gets skimmed.
 - **Existing mechanisms first.** A cron prompt calling an existing skill beats new machinery.
 - **The project's own agent instructions win** (`CLAUDE.md`, `AGENTS.md` or equivalent) over

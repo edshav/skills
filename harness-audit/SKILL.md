@@ -30,10 +30,15 @@ the user picks.
      `.cursor/`, `.github/` agent files or similar: agents, skills, commands, hooks, settings);
    - automation around it: CI config, `Makefile` / package scripts, dev and deploy scripts,
      test commands;
-   - what already runs unattended (scheduled jobs, bots, CI checks).
-3. Find where the human is the bottleneck, from evidence in the repo: recent `git log`,
-   TODO/FIXME clusters, manual steps described in READMEs or docs, recurring kinds of commits
-   (dependency bumps, flaky-test fixes, doc fixes). If `gh` works here, recent issues and PRs
+   - what already runs unattended (scheduled jobs, bots, CI checks);
+   - the parts of the harness outside the repo: where an instruction file routes work to
+     another place as part of the workflow (sessions it messages or hands off to, a folder it
+     sends questions to), read that place's instruction files and config too; where it reads
+     decisions from a shared record, read the record. One hop only. A path cited for reference
+     alone (a doc, an upstream clone, an example) stays outside the inventory.
+3. Find where the human is the bottleneck, from evidence in the repo or a linked part read in
+   step 2: recent `git log`, TODO/FIXME clusters, manual steps described in READMEs or docs,
+   recurring kinds of commits (dependency bumps, flaky-test fixes, doc fixes). If `gh` works here, recent issues and PRs
    count too. Read only, never post.
 4. Answer each of the nine "Questions for a harness audit" in `ideas.md` with a short answer
    and the evidence (file path, command or commit). "No evidence" is a valid answer.
@@ -41,8 +46,8 @@ the user picks.
 
 ## Rules
 
-- A proposal needs evidence of the need in this repo. An idea that merely sounds good is not
-  one; list it under "Not now" with one line.
+- A proposal needs evidence of the need in this repo or a linked part read in step 2. An idea
+  that merely sounds good is not one; list it under "Not now" with one line.
 - Prefer what the project and its harness already have (existing scripts, skills, agents,
   hooks) over new machinery. The smallest version that does the job.
 - Do not recreate the Tiny Software Factories (TSF) web app or its UI. Take the ideas, not
@@ -55,7 +60,8 @@ the user picks.
 
 ## Output
 
-1. **Current harness:** 5–10 lines on what exists and what already runs without a human.
+1. **Current harness:** 5–10 lines on what exists and what already runs without a human,
+   naming each linked part outside the repo that was read, or could not be read.
 2. **Audit answers:** the nine questions, one or two lines each, with evidence.
 3. **Proposals:** a table with: rank, idea # from `ideas.md`, the change in one sentence, files
    it touches or creates, effort (S/M/L), value and why, risk, and how we would know it works.

@@ -10,9 +10,9 @@
     },
     {
       "id": "evidence-or-not-now",
-      "_probes": "A proposal needs evidence of the need in this repo; an idea that merely sounds good goes under 'Not now' with one line",
+      "_probes": "A proposal needs evidence of the need in this repo or a linked part read in step 2; an idea that merely sounds good goes under 'Not now' with one line",
       "prompt": "What can run without me in this project? Use the agentic ideas.",
-      "expected_output": "Every row of the Proposals table cites evidence from this repo for the need: a file path, a command, a commit, an issue or PR. Ideas with no such evidence (for example classifier gates or agent teams in a repo with no sign of the need) appear under 'Not now' with a one-line reason, not in the table. A proposal justified only by the idea's general merit is a failure."
+      "expected_output": "Every row of the Proposals table cites evidence from this repo, or from a linked part read in step 2, for the need: a file path, a command, a commit, an issue or PR. Ideas with no such evidence (for example classifier gates or agent teams in a repo with no sign of the need) appear under 'Not now' with a one-line reason, not in the table. A proposal justified only by the idea's general merit is a failure."
     },
     {
       "id": "at-most-seven-proposals",
@@ -54,7 +54,7 @@
       "id": "guesses-marked",
       "_probes": "Mark guesses as guesses",
       "prompt": "Audit the harness in this repo, and estimate how many hours a month each proposal would save.",
-      "expected_output": "Each hours-saved estimate, and any other claim not backed by something read in the repo (how often a manual step happens, what a CI job costs), is labelled as a guess. Presenting an inferred frequency, cost or saving as fact is a failure."
+      "expected_output": "Each hours-saved estimate, and any other claim not backed by something read in the repo or a linked part (how often a manual step happens, what a CI job costs), is labelled as a guess. Presenting an inferred frequency, cost or saving as fact is a failure."
     },
     {
       "id": "after-pick-one-at-a-time-verified",
@@ -67,6 +67,18 @@
       "_probes": "Step 1: the project's harness is the one its instruction files and config are written for, not the auditing agent; map each idea to that harness's equivalent, and write 'no equivalent' in the proposal row or 'Not now' line where it has none",
       "prompt": "Audit the harness. (Fixture: the repo has an AGENTS.md and .cursor/rules/, and no CLAUDE.md or .claude/ folder.)",
       "expected_output": "The inventory reads AGENTS.md and .cursor/rules/, and the audit treats the project's harness as the one those files are for, even when the audit itself runs in Claude Code. Each proposal names a mechanism that harness has, or a CI job or script. Where an idea has no equivalent in that harness, the proposal row or the idea's 'Not now' line says 'no equivalent'. Proposing /schedule, .claude/agents or Claude Code hooks for this project is a failure."
+    },
+    {
+      "id": "reads-linked-harness-outside-repo",
+      "_probes": "Step 2: where an instruction file routes work to another place as part of the workflow, read that place's instruction files and config too (or the shared decision record itself), one hop; Output: Current harness names each linked part read",
+      "prompt": "Audit the harness. (Fixture: the repo's CLAUDE.md says 'Questions about scope go to the agent session running in ~/work/planning.', and ~/work/planning/CLAUDE.md exists with its own rules and a line routing release questions to the session in ~/work/release.)",
+      "expected_output": "The inventory reads ~/work/planning/CLAUDE.md as part of the harness, and Current harness names it as a linked part outside the repo. The audit stops at one hop: ~/work/release is not read. Auditing only the files inside the repo, or editing anything in ~/work/planning, is a failure."
+    },
+    {
+      "id": "cited-path-not-pulled-in",
+      "_probes": "Step 2: a path cited only for reference (a doc, an upstream clone, an example) stays outside the inventory",
+      "prompt": "Audit the harness. (Fixture: the repo's AGENTS.md says 'For the API conventions see ~/src/upstream-sdk/docs/STYLE.md' and nothing routes work or questions there; ~/src/upstream-sdk/ has its own AGENTS.md.)",
+      "expected_output": "Neither ~/src/upstream-sdk/AGENTS.md nor its config is inventoried as part of this project's harness, and Current harness lists no linked part for it. Treating the upstream clone's instruction files or config as part of the harness, or proposing changes to them, is a failure."
     },
     {
       "id": "negative-code-review",
