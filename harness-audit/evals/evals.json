@@ -21,10 +21,10 @@
       "expected_output": "The Proposals table has at most 7 rows, each with a rank, ordered by value for effort. Ideas beyond the cap go under 'Not now'. An eighth proposal is a failure even though the user asked for as many as possible."
     },
     {
-      "id": "nine-questions-answered-with-evidence",
-      "_probes": "Step 4: answer each of the nine audit questions with a short answer and the evidence; 'No evidence' is valid",
+      "id": "ten-questions-answered-with-evidence",
+      "_probes": "Step 4: answer each of the ten audit questions with a short answer and the evidence; 'No evidence' is valid",
       "prompt": "/harness-audit",
-      "expected_output": "The Audit answers section has all nine questions from ideas.md, each with one or two lines and a file path, command or commit as evidence, or an explicit 'No evidence'. A missing question, or an answer with neither evidence nor 'No evidence', is a failure."
+      "expected_output": "The Audit answers section has all ten questions from ideas.md, each with one or two lines and a file path, command or commit as evidence, or an explicit 'No evidence'. A missing question, or an answer with neither evidence nor 'No evidence', is a failure."
     },
     {
       "id": "unattended-risk-needs-approval-and-narrow-tools",
@@ -81,6 +81,12 @@
       "expected_output": "Neither ~/src/upstream-sdk/AGENTS.md nor its config is inventoried as part of this project's harness, and Current harness lists no linked part for it. Treating the upstream clone's instruction files or config as part of the harness, or proposing changes to them, is a failure."
     },
     {
+      "id": "template-backport-question",
+      "_probes": "Step 4 and question 10 in ideas.md: do harness improvements made in one project flow back to the shared template, and do we know which projects run which version of it? (idea 13)",
+      "prompt": "Audit the harness. (Fixture: the repo's README says its .claude/ folder was copied from a shared template repo, or the harness is installed as a plugin from one, and recent commits add a hook and a skill to .claude/ locally with nothing project-specific in them.)",
+      "expected_output": "The answer to question 10 names the shared template or plugin as this harness's source, with the evidence (the README line or the plugin config). It says whether the local hook and skill went back to the template, citing the commits, or 'No evidence' of a backport, and whether the repo records which template version it runs, or 'No evidence'. A question 10 answer that ignores the template origin, or claims a backport or a version with no evidence, is a failure."
+    },
+    {
       "id": "negative-code-review",
       "_probes": "DO NOT trigger for a code review",
       "prompt": "Review the diff on this branch before I open the PR.",
@@ -90,7 +96,7 @@
       "id": "negative-repo-quality-audit",
       "_probes": "DO NOT trigger for a repo-wide code quality audit",
       "prompt": "Audit this codebase: bugs, security holes, dead code, what to delete.",
-      "expected_output": "The harness-audit skill does not fire. The request is a code quality audit, not a harness audit; no TSF ideas or nine audit questions appear."
+      "expected_output": "The harness-audit skill does not fire. The request is a code quality audit, not a harness audit; no TSF ideas or ten audit questions appear."
     },
     {
       "id": "negative-single-file-change",
@@ -102,7 +108,7 @@
       "id": "negative-automation-recommender",
       "_probes": "DO NOT trigger for general automation recommendations or first-time setup of an agent tool",
       "prompt": "Recommend Claude Code hooks and MCP servers for this repo.",
-      "expected_output": "The harness-audit skill does not fire. No nine audit questions, TSF ideas or 7-proposal table appear; the request is a general automation recommendation."
+      "expected_output": "The harness-audit skill does not fire. No ten audit questions, TSF ideas or 7-proposal table appear; the request is a general automation recommendation."
     }
   ]
 }

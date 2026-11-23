@@ -1,10 +1,10 @@
 # TSF ideas for a project harness
 
-Distilled from four YouTube videos: the "Tiny Software Factories" (TSF) course, lessons 1–3, and
-the companion video "ELITE Agentic Engineers Are LEAVING THE LOOP". Sales pitch, filler and the
-course's web UI specifics are dropped. Each idea maps to the closest Claude Code mechanism, as a
-worked example; in another harness, use its equivalent. Use this as a checklist when auditing a
-project's harness.
+Distilled from five YouTube videos: the "Tiny Software Factories" (TSF) course, lessons 1–4
+(lesson 4 is "The Meta Software Factory"), and the companion video "ELITE Agentic Engineers Are
+LEAVING THE LOOP". Sales pitch, filler and the course's web UI specifics are dropped. Each idea
+maps to the closest Claude Code mechanism, as a worked example; in another harness, use its
+equivalent. Use this as a checklist when auditing a project's harness.
 
 ## Core thesis
 
@@ -64,6 +64,12 @@ models below it.
   skill); `Workflow`
   for one-shot fan-out.
 - Pays when: work splits into parallel lanes that need coordinating, not just parallel answers.
+- Lesson 4 adds: one **owner agent per running factory** that owns only that factory's changelog
+  and specialisation; only the lead can hire, and every hire is an approval point ("not subagent
+  delegation, not agent swarms"). Leads of different factories message each other through a
+  **factory mailbox** (list and send tools), so a harness can route work to another place.
+- Claude Code: `SendMessage` between sessions in different repos, or a terminal multiplexer's
+  command that prompts another session.
 
 ### 7. Agentic access parity
 Everything you can do, the agent can do: every UI control and setting has a matching tool, so the
@@ -108,6 +114,17 @@ next time.
 Keep a generic harness template with good defaults. Mount it into a repo with one command
 (init), shape it with a written plan of about 150 lines (configure), then specialise per problem.
 - Claude Code: a personal plugin or skill set reused across repos; `/init` plus a project plan.
+- **Backport (lesson 4).** A feature built in one running factory that isn't project-specific gets
+  ported back into the template, so every new factory starts with one more capability than the
+  last. The work compounds instead of being rebuilt per project. There are three states: template
+  → empty factory → running factory.
+- **The template is a managed artifact.** It has a spec, an append-only changelog (change, reason,
+  human decision, diff) and a list of the running factories made from it. A change to it spreads to
+  every future factory, so committing one is always an approval point (idea 3).
+- Claude Code: the shared skills/plugin repo is the template; its git history and PRs are the
+  changelog; a hook, agent or skill that a project grows and others could use goes back there as a
+  PR.
+- Pays when: several repos share one harness and fixes made in one never reach the others.
 
 ### 14. "Liquid software" and DX
 Tooling is meant to be reshaped: themes, hotkeys, nav, settings. Good DX makes you invest in the
@@ -139,3 +156,5 @@ task.
 7. Can we see what an unattended run did, and what it cost? (9)
 8. Where would a typed pass/fail verdict let an agent continue without us? (10)
 9. Do our approvals and rejections feed back into the harness? (12)
+10. Do harness improvements made in one project flow back to the shared template, and do we know
+    which projects run which version of it? (13)
