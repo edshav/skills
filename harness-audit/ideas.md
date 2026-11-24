@@ -1,11 +1,13 @@
 # TSF ideas for a project harness
 
-Distilled from six YouTube videos: the "Tiny Software Factories" (TSF) course, lessons 1–4
+Distilled from seven YouTube videos: the "Tiny Software Factories" (TSF) course, lessons 1–4
 (lesson 4 is "The Meta Software Factory"), the companion video "ELITE Agentic Engineers Are
-LEAVING THE LOOP", and Kent C. Dodds' "The End of Code Review" (idea 16 only; not part of the
-course). Sales pitch, filler and the course's web UI specifics are dropped. Each idea
-maps to the closest Claude Code mechanism, as a worked example; in another harness, use its
-equivalent. Use this as a checklist when auditing a project's harness.
+LEAVING THE LOOP", Kent C. Dodds' "The End of Code Review" (idea 16 only; not part of the
+course), and Steve Yegge's "Software Factories: Escape from Trash Mountain" (idea 17, the stall
+note under idea 9 and the Yegge caveats; not part of the course). Sales pitch, filler and the
+course's web UI specifics are dropped. Each idea maps to the closest Claude Code mechanism, as a
+worked example; in another harness, use its equivalent. Use this as a checklist when auditing a
+project's harness.
 
 ## Core thesis
 
@@ -18,6 +20,10 @@ equivalent. Use this as a checklist when auditing a project's harness.
 - **Specialised beats generic.** A focused agent with focused tools, context and prompt beats one
   agent used for everything.
 - **Build the system that builds the system.** Sit in the loop only to build or tune the system.
+- **Counterpoint (Yegge):** don't build scaffolding to make the model smarter; it gets smarter on
+  its own (the bitter lesson). The mechanical layer (merge queue, CI, review loops) is an
+  afternoon's work for the agent, so build it, don't buy it. This cuts against "the system is the
+  edge": the system is worth building, not worth growing.
 - **Agentic engineering vs vibe coding:** know what the system does so well you don't have to look,
   as opposed to not looking because you don't know.
 
@@ -90,6 +96,11 @@ plain sentences so you can follow an agent without reading raw traces. "If you d
 can't improve."
 - Claude Code: status line; `PostToolUse` or `Stop` hooks that append a summary or cost line to a
   log.
+- **Stalled work (Yegge).** The daily failure is not a bad run but no run: workers that did nothing
+  overnight, work pooled behind one gate. One agent's only job is to look for work nobody is
+  looking at.
+- Claude Code: a scheduled prompt (idea 2) that lists stale branches, PRs and tasks with no
+  activity since the last check.
 
 ### 10. Classifier gates (Jev)
 Jev (TypeSafe AI, Sept 2026) is a discriminative model that returns typed values, probability
@@ -160,6 +171,17 @@ reviews that translation.
 - Pays when: diff review of a contained module is the bottleneck, or reviews of it keep finding
   logic bugs that a stated invariant would have caught.
 
+### 17. Prune the rules: the append-only dump
+Agents write every ruling down and never delete anything, so instruction files and memory grow into
+a record of every change of mind. Taken far enough this is **overfencing**: rules piled up after
+corrections until no legal work was left and the factory sat idle. Complaints make it worse,
+because agents answer blame with more defensive rules. The fix is a regular pass by a fresh model
+whose only job is to delete: stale, superseded and duplicate rules.
+- Claude Code: a deletion-only pass over CLAUDE.md, memory and skill files by an agent that did not
+  write them (`claude-md-improver`, memory cleanup), with additions forbidden as in a reader-test
+  lens; corrections phrased as the rule plus why, not as blame.
+- Pays when: instruction files only ever grow, or agents stop doing things nobody forbade outright.
+
 ## Caveats from the course itself
 
 - TSF patterns are deliberate shortcuts: "not recommended as long-term solutions", optimised for
@@ -167,6 +189,18 @@ reviews that translation.
 - Self-modifying agents are dangerous without limits.
 - Measure of success: how many agents do useful work for you right now. Not token-maxing, not
   `while` loops doing random work.
+
+## Caveats from the Yegge talk
+
+- One operator's anecdotes at a scale few can afford (20+ Max subscriptions, ~50 agents), with
+  nothing measured. The source is auto-captions without the slides.
+- **Output can outrun the humans downstream.** His factory shipped features faster than his users
+  could read about them, and they asked him to slow down. The bottleneck is also everyone who has
+  to absorb the work, not only the person who starts it.
+- **Expect to rebuild.** Each model generation builds something slightly too big for itself to
+  maintain; he rewrote his factory about every two months. Keep the harness cheap to throw away.
+- Unverified claim: agents that start from notes left by previous holders of their role spend fewer
+  tokens checking their environment and act more boldly.
 
 ## Questions for a harness audit
 
@@ -183,3 +217,5 @@ reviews that translation.
     which projects run which version of it? (13)
 11. Which modules are gated by someone reading the diff, but could be gated by stated laws that
     the human reviews instead? (16)
+12. When did anyone last delete a rule from our instruction files, and which rules stop agents
+    from doing work we want done? (17)

@@ -21,10 +21,10 @@
       "expected_output": "The Proposals table has at most 7 rows, each with a rank, ordered by value for effort. Ideas beyond the cap go under 'Not now'. An eighth proposal is a failure even though the user asked for as many as possible."
     },
     {
-      "id": "eleven-questions-answered-with-evidence",
-      "_probes": "Step 4: answer each of the eleven audit questions with a short answer and the evidence; 'No evidence' is valid",
+      "id": "every-question-answered-with-evidence",
+      "_probes": "Step 4: answer each audit question in ideas.md with a short answer and the evidence; 'No evidence' is valid",
       "prompt": "/harness-audit",
-      "expected_output": "The Audit answers section has all eleven questions from ideas.md, each with one or two lines and a file path, command or commit as evidence, or an explicit 'No evidence'. A missing question, or an answer with neither evidence nor 'No evidence', is a failure."
+      "expected_output": "The Audit answers section has every question from ideas.md, each with one or two lines and a file path, command or commit as evidence, or an explicit 'No evidence'. A missing question, or an answer with neither evidence nor 'No evidence', is a failure."
     },
     {
       "id": "unattended-risk-needs-approval-and-narrow-tools",
@@ -96,7 +96,7 @@
       "id": "negative-repo-quality-audit",
       "_probes": "DO NOT trigger for a repo-wide code quality audit",
       "prompt": "Audit this codebase: bugs, security holes, dead code, what to delete.",
-      "expected_output": "The harness-audit skill does not fire. The request is a code quality audit, not a harness audit; no TSF ideas or eleven audit questions appear."
+      "expected_output": "The harness-audit skill does not fire. The request is a code quality audit, not a harness audit; no TSF ideas or audit questions appear."
     },
     {
       "id": "negative-single-file-change",
@@ -108,7 +108,7 @@
       "id": "negative-automation-recommender",
       "_probes": "DO NOT trigger for general automation recommendations or first-time setup of an agent tool",
       "prompt": "Recommend Claude Code hooks and MCP servers for this repo.",
-      "expected_output": "The harness-audit skill does not fire. No eleven audit questions, TSF ideas or 7-proposal table appear; the request is a general automation recommendation."
+      "expected_output": "The harness-audit skill does not fire. No audit questions, TSF ideas or 7-proposal table appear; the request is a general automation recommendation."
     }
   ]
 }
