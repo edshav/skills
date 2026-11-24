@@ -40,7 +40,7 @@ the user picks.
    step 2: recent `git log`, TODO/FIXME clusters, manual steps described in READMEs or docs,
    recurring kinds of commits (dependency bumps, flaky-test fixes, doc fixes). If `gh` works here, recent issues and PRs
    count too. Read only, never post.
-4. Answer each of the ten "Questions for a harness audit" in `ideas.md` with a short answer
+4. Answer each of the eleven "Questions for a harness audit" in `ideas.md` with a short answer
    and the evidence (file path, command or commit). "No evidence" is a valid answer.
 5. Propose at most 7 changes, ranked by value for effort.
 
@@ -62,7 +62,7 @@ the user picks.
 
 1. **Current harness:** 5–10 lines on what exists and what already runs without a human,
    naming each linked part outside the repo that was read, or could not be read.
-2. **Audit answers:** the ten questions, one or two lines each, with evidence.
+2. **Audit answers:** the eleven questions, one or two lines each, with evidence.
 3. **Proposals:** a table with: rank, idea # from `ideas.md`, the change in one sentence, files
    it touches or creates, effort (S/M/L), value and why, risk, and how we would know it works.
 4. **Not now:** ideas considered and skipped, one line each with the reason.

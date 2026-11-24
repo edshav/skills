@@ -1,8 +1,9 @@
 # TSF ideas for a project harness
 
-Distilled from five YouTube videos: the "Tiny Software Factories" (TSF) course, lessons 1–4
-(lesson 4 is "The Meta Software Factory"), and the companion video "ELITE Agentic Engineers Are
-LEAVING THE LOOP". Sales pitch, filler and the course's web UI specifics are dropped. Each idea
+Distilled from six YouTube videos: the "Tiny Software Factories" (TSF) course, lessons 1–4
+(lesson 4 is "The Meta Software Factory"), the companion video "ELITE Agentic Engineers Are
+LEAVING THE LOOP", and Kent C. Dodds' "The End of Code Review" (idea 16 only; not part of the
+course). Sales pitch, filler and the course's web UI specifics are dropped. Each idea
 maps to the closest Claude Code mechanism, as a worked example; in another harness, use its
 equivalent. Use this as a checklist when auditing a project's harness.
 
@@ -137,6 +138,28 @@ medium effort is often enough. Subscriptions are subsidised and won't last, so k
 task.
 - Claude Code: `model` per agent; effort levels.
 
+### 16. Intent-level review: executable laws
+Review the intent, not the diff. Before any code exists, the spec is written as machine-checkable
+laws (invariants over all inputs); the human reviews the laws, and the implementation is gated on
+passing them, not on someone reading it. Agents write code faster than anyone can read diffs, and
+adding more AI reviewers keeps finding new nits without ever converging. Formal proof is the ideal;
+the practical version shown is property-based tests: a law list run against many generated inputs.
+The laws are hard to read, so an agent translates them back into plain language and the human
+reviews that translation.
+- Claude Code: a laws file per module (property tests: fast-check, Hypothesis or similar),
+  written first; reader-test back-translation (lens 6) on it before implementation; once approved,
+  the laws are frozen against the implementer (a `PreToolUse` hook or an `Edit(<laws path>)` deny
+  rule), and a different agent from the laws author implements; CI runs the laws as the gate;
+  idea 11 can loop on "all laws pass".
+- Limits: property tests sample inputs and do not prove anything; laws check only what they state,
+  so a gap in the spec still passes and spec review gets heavier, not lighter; an agent that writes
+  both laws and code can bend either side until they agree. It fits pure, contained logic (storage,
+  parsers, money maths, state machines), not UI, integrations, security or performance; diffs that
+  touch a trust boundary, secrets or amounts keep their normal review. The author says he has not
+  shipped it himself yet.
+- Pays when: diff review of a contained module is the bottleneck, or reviews of it keep finding
+  logic bugs that a stated invariant would have caught.
+
 ## Caveats from the course itself
 
 - TSF patterns are deliberate shortcuts: "not recommended as long-term solutions", optimised for
@@ -158,3 +181,5 @@ task.
 9. Do our approvals and rejections feed back into the harness? (12)
 10. Do harness improvements made in one project flow back to the shared template, and do we know
     which projects run which version of it? (13)
+11. Which modules are gated by someone reading the diff, but could be gated by stated laws that
+    the human reviews instead? (16)
