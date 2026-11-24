@@ -27,7 +27,7 @@ The fix is to hand the file to readers who have nothing but the file.
 **Confirm with the user before dispatching any reader.** A pass costs several hundred
 thousand tokens (see *Cost*) and is worth nothing if it reads the wrong file. State in one
 line what you are about to run — the document's absolute path, the lenses you picked, and
-that nothing gets edited — and wait for an explicit go-ahead. This holds when the user
+that the document is not edited — and wait for an explicit go-ahead. This holds when the user
 asked for the pass by name too: they named the skill, not the file and not the lens set. A
 correction is answered by restating the corrected plan and waiting again, not by launching
 on the assumption you read it right.
@@ -68,6 +68,14 @@ documents, narrow each reader to the fewest files it needs; readers asked to hol
 long files at once fail mid-response more often, and the recovery is to relaunch with a
 tighter scope rather than to retry the same prompt.
 
+Write the pass's files — any copy of a document you hand a reader (such as the lens-6
+reteller's stripped copy), the merged findings list and the filter's verdicts — to
+`.reader-test/<date>-<doc-slug>/` in the repo under review, not to the session's temp
+directory, which a restart wipes mid-pass. Add `.reader-test/` to that repo's exclude file
+(`git rev-parse --git-path info/exclude`), not the shared `.gitignore`, and give readers
+and the filter absolute paths into it. Delete the directory only when the user says the
+pass is closed.
+
 ### The shape of a reader prompt
 
 Assembled, those requirements look like this. Substitute the lens, and keep the rest —
@@ -80,7 +88,7 @@ deliberate. Do not ask for it and do not apologise for it. The file is all you g
 it is all the next person to read it will get either.
 
 Read: /absolute/path/to/document.md
-For checking claims against their source, you may also open: /absolute/path/to/repo
+For checking claims against their source, you may also open: /absolute/path/to/repo (not its .reader-test/)
 
 Your lens is <LENS NAME>, and only that: <one-sentence position>.
 Other readers have the other lenses. Do not report <lens>, <lens> or <lens> — findings

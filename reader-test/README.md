@@ -84,6 +84,13 @@ found correct, a clean document and a lazy reader produce identical output.
 
 **Forbid editing.** A reader that starts fixing stops reading.
 
+**Keep the pass's files in the reviewed repo, not in session temp.** A session that
+restarted mid-pass lost its temp directory, and the merged findings had to be rebuilt by
+hand from the readers' reports before the filter could run. So the reader copies, the
+findings list and the verdicts go to `.reader-test/<date>-<doc-slug>/`, excluded through
+`.git/info/exclude` so nothing lands in the shared `.gitignore`, and the directory stays
+until the user closes the pass.
+
 **Findings are suspicions, not verdicts.** Readers lack context by construction, so some
 findings are the context working as intended. They get checked against the file before
 they reach the user — but checked, not waved off, since the reflex to explain why a
@@ -101,7 +108,7 @@ before the report, and additions are listed as risks rather than applied.
 
 ## Harness requirements
 
-The skill assumes the agent can **read files** and **start readers that do not share the
+The skill assumes the agent can **read and write files** and **start readers that do not share the
 current conversation**. In practice that means one of:
 
 - a harness with subagent/task dispatch (Claude Code, Codex, Cursor agents, …) — readers
@@ -120,7 +127,7 @@ not do it.
 
 - `SKILL.md` — the instruction module itself. YAML frontmatter (`name`, `description`,
   `license`) plus a Markdown body: the confirm-before-dispatch gate, the one rule, how to
-  shape a reader prompt, a copy-paste prompt template, the five lenses, how to triage what
+  shape a reader prompt, a copy-paste prompt template, the six lenses, how to triage what
   comes back, and the report-and-wait gate that keeps findings out of the document until
   the author picks.
 - `evals/evals.json` — a generic eval set; each entry's `_probes` field names the rule
@@ -151,7 +158,7 @@ not do it.
 ### Instruction-surface install (everything else)
 
 The body of `SKILL.md` is a self-contained system prompt. It assumes only that the agent
-can read files and dispatch context-free readers (see
+can read and write files and dispatch context-free readers (see
 [Harness requirements](#harness-requirements)).
 
 | Tool                        | Where to put the SKILL.md body                      |

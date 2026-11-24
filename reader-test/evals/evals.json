@@ -6,7 +6,7 @@
       "id": "confirms-before-dispatching-readers",
       "_probes": "The gate — the pass is stated and confirmed before any reader is launched, including when the skill was asked for by name",
       "prompt": "Reader-test <DOC-PATH>.",
-      "expected_output": "No reader is dispatched in the same turn. The skill first states in one line what it is about to run — the absolute path, the lenses it picked, and that nothing will be edited — and then stops and waits for the user. Launching readers without that answer is a failure even though the skill was requested by name; so is replying with an open question about what to review instead of a concrete plan to confirm."
+      "expected_output": "No reader is dispatched in the same turn. The skill first states in one line what it is about to run — the absolute path, the lenses it picked, and that the document will not be edited — and then stops and waits for the user. Launching readers without that answer is a failure even though the skill was requested by name; so is replying with an open question about what to review instead of a concrete plan to confirm."
     },
     {
       "id": "readers-get-files-never-conversation",
@@ -42,7 +42,7 @@
       "id": "forbids-editing-and-uses-absolute-paths",
       "_probes": "DO NOT EDIT ANY FILE, and readers are given absolute paths",
       "prompt": "Reader-test <DOC-PATH>.",
-      "expected_output": "Every reader prompt contains an explicit instruction not to edit any file and gives absolute paths. No file on disk is modified during the pass. A reader that starts fixing the document is a failure of the prompt, not of the reader."
+      "expected_output": "Every reader prompt contains an explicit instruction not to edit any file and gives absolute paths. Neither the reviewed document nor any tracked file is modified during the pass. A reader that starts fixing the document is a failure of the prompt, not of the reader."
     },
     {
       "id": "adds-money-data-lens-conditionally",
@@ -91,6 +91,12 @@
       "_probes": "Findings are filtered in a fresh agent with an explicitly named model, given the document and findings only; each gets exactly one verdict — keep, drop or addition — and additions are listed, never applied",
       "prompt": "Reader-test <DOC-PATH>. Last time the fixes made it longer and nothing got clearer.",
       "expected_output": "Before reporting, the findings go to one more agent dispatched with an explicitly named model, which receives the document and the findings list but not the readers' reasoning or any conversation context. Every finding comes back with exactly one verdict: keep (deletion or rewording that changes what a reader does), drop (style, restatement, nit, 'clarify just in case') or addition (closable only by adding text). The report numbers only keep findings and closes with the drop and addition lists, one reason per line. Judging the findings in the authoring session, numbering an addition as a fix, or editing the document before the user names findings is a failure."
+    },
+    {
+      "id": "keeps-pass-files-durable",
+      "_probes": "The pass's files (reader copies, merged findings list, filter verdicts) go to .reader-test/<date>-<doc-slug>/ in the reviewed repo, excluded via .git/info/exclude, and survive until the user closes the pass",
+      "prompt": "Reader-test <DOC-PATH>.",
+      "expected_output": "The reader copies, the merged findings list and the filter's verdicts are written under <repo>/.reader-test/<date>-<doc-slug>/, not in a session temp directory. `.reader-test/` is listed in the repo's exclude file (git rev-parse --git-path info/exclude) and .gitignore is untouched. Readers that get a copy, and the filter, are given absolute paths into that directory. The directory still exists when the report is made; deleting it before the user says the pass is closed is a failure."
     },
     {
       "id": "reports-findings-and-applies-nothing",
