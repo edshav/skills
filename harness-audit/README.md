@@ -22,8 +22,9 @@ automation recommendations or first-time setup of an agent tool.
 
 ## What it does
 
-1. Reads [`ideas.md`](ideas.md): 15 ideas, the course's own caveats and ten audit
-   questions, distilled from the "Tiny Software Factories" course and a companion video.
+1. Reads [`ideas.md`](ideas.md): 16 ideas, the course's own caveats and eleven audit
+   questions, distilled from the "Tiny Software Factories" course, a companion video and one
+   non-course video (Kent C. Dodds' "The End of Code Review", idea 16).
 2. Inventories the harness read-only: agent instruction files (`CLAUDE.md`, `AGENTS.md`,
    Cursor rules and the like), harness config folders, CI, scripts, what already runs
    unattended. Where those files route work to another place (sessions they hand off to, a
@@ -33,7 +34,7 @@ automation recommendations or first-time setup of an agent tool.
 3. Finds where the human is the bottleneck from evidence in the repo or a linked part: `git
    log`, TODO clusters, manual steps in docs, recurring commits, and issues and PRs if `gh`
    works.
-4. Answers the ten questions with evidence, then proposes at most 7 changes in a table
+4. Answers the eleven questions with evidence, then proposes at most 7 changes in a table
    (idea #, change, files, effort, value, risk, how we'd know it works), plus a "Not now" list.
 5. Stops. After you pick, implements the picks one at a time and verifies each.
 
@@ -66,7 +67,7 @@ automation recommendations or first-time setup of an agent tool.
 | File | Purpose |
 | --- | --- |
 | [`SKILL.md`](SKILL.md) | The prompt body: steps, rules, output format, the after-pick phase. |
-| [`ideas.md`](ideas.md) | The idea catalogue and the ten audit questions. |
+| [`ideas.md`](ideas.md) | The idea catalogue and the eleven audit questions. |
 | [`evals/evals.json`](evals/evals.json) | Evals; each `_probes` names the rule it enforces. |
 | [`LICENSE`](LICENSE) | MIT. |
 
