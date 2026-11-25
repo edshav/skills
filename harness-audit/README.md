@@ -73,6 +73,30 @@ automation recommendations or first-time setup of an agent tool.
 | [`evals/evals.json`](evals/evals.json) | Evals; each `_probes` names the rule it enforces. |
 | [`LICENSE`](LICENSE) | MIT. |
 
+## Syncing from upstream
+
+`ideas.md` is a harness-neutral copy of the author's private notes file, `tsf-ideas.md`, in a
+local repo with no remote. When a commit there adds a video, idea, note or question, port it
+like this:
+
+- Copy new ideas, notes, caveats and questions word for word.
+- Wherever the source points at its local transcript files, say "videos" or "the source"
+  instead (the header, the Yegge caveats), and drop the `*.srt` and "raw transcripts are not
+  needed" lines. Keep the header sentence "as a worked example; in another harness, use its
+  equivalent".
+- Keep the Claude Code mechanism lines as worked examples. Replace the author's own tools with
+  the generic thing they do there: `herdr agent prompt` becomes "a terminal multiplexer's command
+  that prompts another session", Herdr lane sessions become "parallel sessions in separate
+  worktrees", and a skill named as the mechanism becomes "e.g. the `<skill>` skill".
+- A new source goes in two places: the `ideas.md` header and the source list in step 1 of
+  "What it does" above.
+- Write no idea or question counts anywhere; `SKILL.md`, this README and the evals are
+  count-free.
+- To verify, diff the source at the new commit against `ideas.md`. Only the adaptations above
+  should remain.
+- Cite the upstream commit as `tsf <hash>` in the commit message only. A PR body or doc names it
+  as "the upstream ideas file", because readers cannot resolve the hash.
+
 ## Install
 
 Claude Code plugin:
