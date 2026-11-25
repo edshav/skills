@@ -23,9 +23,10 @@ automation recommendations or first-time setup of an agent tool.
 ## What it does
 
 1. Reads [`ideas.md`](ideas.md): the ideas, caveats and audit questions, distilled from the
-   "Tiny Software Factories" course, a companion video and two non-course videos (Kent C.
+   "Tiny Software Factories" course, a companion video and three non-course videos (Kent C.
    Dodds' "The End of Code Review", idea 16; Steve Yegge's "Software Factories: Escape from
-   Trash Mountain", idea 17, the stall note under idea 9 and the Yegge caveats).
+   Trash Mountain", idea 17, the stall note under idea 9 and the Yegge caveats; "Everything
+   changed", idea 18, the notes under ideas 1 and 8 and its caveats).
 2. Inventories the harness read-only: agent instruction files (`CLAUDE.md`, `AGENTS.md`,
    Cursor rules and the like), harness config folders, CI, scripts, what already runs
    unattended. Where those files route work to another place (sessions they hand off to, a
