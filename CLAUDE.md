@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-A monorepo of reusable, harness- and LLM-agnostic instruction modules ("skills") packaged in the [SKILL format](https://agentskills.io/specification) — YAML frontmatter + Markdown body. Each top-level subdirectory is one self-contained skill; there is no shared build, no root `package.json`, and no CI. Skills are consumed either by dropping the folder into an agent's skills directory (e.g. `~/.claude/skills/<name>/`) or by pasting `SKILL.md`'s body into a non-SKILL-aware instruction surface (Cursor rules, Copilot instructions, etc.).
+A monorepo of reusable, harness- and LLM-agnostic instruction modules ("skills") packaged in the [SKILL format](https://agentskills.io/specification) — YAML frontmatter + Markdown body. Each top-level subdirectory is one self-contained skill; there is no shared build, no root `package.json`, and CI runs only `scripts/check.py`. Skills are consumed either by dropping the folder into an agent's skills directory (e.g. `~/.claude/skills/<name>/`) or by pasting `SKILL.md`'s body into a non-SKILL-aware instruction surface (Cursor rules, Copilot instructions, etc.).
 
-Current skills: [`generate-tasks-json/`](generate-tasks-json/), [`mutation-analyzer/`](mutation-analyzer/), [`reader-test/`](reader-test/), [`lanes/`](lanes/), [`harness-audit/`](harness-audit/), [`find-skills/`](find-skills/) (a vendored copy of `vercel-labs/skills`, MIT; no evals), [`receiving-code-review/`](receiving-code-review/) (a vendored copy from `obra/superpowers`, MIT; no evals). The root [`README.md`](README.md) is the up-to-date inventory.
+The root [`README.md`](README.md) is the skill inventory.
 
 ## Per-skill anatomy (and what to keep in sync)
 
@@ -14,12 +14,14 @@ Each skill directory contains:
 
 - `SKILL.md` — the actual prompt body, with YAML frontmatter declaring `name`, `description`, and (sometimes) `license`. The `description` is the **trigger contract** — it's what causes a SKILL-aware harness to route a user request to this skill. Editing it changes activation behavior; treat it like a public API.
 - `README.md` — human-facing overview, install matrix, design rationale.
-- `evals/evals.json` — generic eval suite where each entry's `_probes` field names the specific rule from `SKILL.md` (or `METHODOLOGY.md`) that the eval enforces. When a rule changes, the corresponding eval must change with it.
+- `evals/evals.json` (vendored copies ship without one) — generic eval suite where each entry's `_probes` field names the specific rule from `SKILL.md` (or `METHODOLOGY.md`) that the eval enforces. When a rule changes, the corresponding eval must change with it.
 - `LICENSE` — MIT, per-skill (each carries its own).
 
 When modifying any rule in a `SKILL.md`, audit `README.md` and `evals/evals.json` in the same skill for drift — they encode the same rules in three different registers (prompt, human doc, executable check).
 
-A new or renamed skill also needs its entry in `.claude-plugin/marketplace.json` and its `/plugin install` command in the root `README.md`.
+A new or renamed skill also needs its entry in `.claude-plugin/marketplace.json` and its `/plugin install` command in the root `README.md`. `python3 -I scripts/check.py` checks both, plus each skill's `README.md`, `LICENSE`, frontmatter `name` and evals JSON; CI runs it on every PR.
+
+Porting from the upstream ideas file into `harness-audit/ideas.md` follows "Syncing from upstream" in [`harness-audit/README.md`](harness-audit/README.md).
 
 ## The one skill with code: `generate-tasks-json`
 
