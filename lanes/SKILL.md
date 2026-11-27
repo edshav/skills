@@ -58,7 +58,7 @@ code and is kept out of git.
    two lanes may share a file when they edit different functions. When the changes
    already exist as patches, check with `git apply` onto the base branch, in plan order and
    with each pair of lanes swapped; otherwise compare the lanes' function lists. A
-   function two lanes both edit fixes an order: the later PR rebases onto the earlier
+   function two lanes both edit fixes an order: the later PR builds on the earlier
    one. The lanes table names each lane's functions, PR order, worktrees, session model
    (as approved) and, once the lane reports, its tab id.
 5. **Merge order**, and batches when the maintainer reviews in batches. Batch 1: every PR
@@ -76,9 +76,9 @@ code and is kept out of git.
   its model and gets the cheapest one that fits: the strongest for the first grade of
   judgement items (tests, mutations, money logic) and for fact-checking a review text with
   technical claims; a cheaper one for mechanical checks, re-grades after a small fix, trial
-  builds and fact-checking a short text (a one-line closing comment). Effort stays at the
-  default. The coordinator stays on the strongest model: it catches errors across PRs, and
-  it saves by taking fewer, shorter turns, not by a cheaper model.
+  builds and fact-checking a short text (a one-line closing comment). The coordinator stays
+  on the strongest model: it catches errors across PRs, and it saves by taking fewer,
+  shorter turns, not by a cheaper model.
 - **Worktree.** One worktree per PR, on the branch and base the PR map names.
 - **Placement.** One session per lane, in a terminal multiplexer if you use one (e.g.
   Herdr, tmux), in the repo's workspace or session. The tab is named `<lane> · <session name>`:
@@ -102,16 +102,16 @@ Per-PR steps, in the lane:
    the check to its grader, the author walks the check's mutation categories itself, so the
    grader confirms rather than finds. A commit made after the check gets its diff read for
    leftovers (debug output, stray files) before the push.
-5. Publish per the brief's "Who publishes": push and open the PR in one command
-   (`git push … && gh pr create …`). Where a hook asks before a push or a post, its prompt
-   is the user's word: say in two or three lines what goes out (branch, head, PR or post),
-   then run the command, with no dialog of your own. Without such a hook, ask for it (and
-   for any other outward step: a post to the code host, a message) through the
-   AskUserQuestion dialog, with options like "push and open" / "not yet", not as a
-   question in the reply text, where it gets lost in long output. A PR body states what a
-   test checks and what the pre-PR check needs, not reasoning about edge modes; text for
-   the code host goes through the review pipeline once, after the code has settled. A
-   branch in the embargo ledger waits for the go the ledger names.
+5. Publish per the brief's "Who publishes": push, then open the PR, each as its own command.
+   Where a hook asks before a push or a post, its prompt is the user's word: say in two or
+   three lines what goes out (branch, head, PR or post), then run the command, with no
+   dialog of your own. Without such a hook, ask for it (and for any other outward step: a
+   post to the code host, a message) through the AskUserQuestion dialog, with options like
+   "push and open" / "not yet", not as a question in the reply text, where it gets lost in
+   long output. A PR body states what a test checks and what the pre-PR check needs, not
+   reasoning about edge modes; text for the code host goes through the review pipeline once,
+   after the code has settled. A branch in the embargo ledger waits for the go the ledger
+   names.
 6. Report to the coordinator: the PR and its commit, the inventory rows it covers, any
    step due after a merge.
 

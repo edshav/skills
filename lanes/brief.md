@@ -27,7 +27,7 @@ auditors>; all items of <pre-PR check>, its result written to <pre-PR results fi
 publish per "Who publishes".
 
 Who publishes: <you push and open the PR | the coordinator does>, per the lanes skill's
-per-PR steps: push and PR in one command; a hook's prompt before a push or a post is the
+per-PR steps: push, then the PR; a hook's prompt before a push or a post is the
 user's word; without such a hook, the AskUserQuestion dialog, not the reply text. A branch
 in the embargo ledger waits for the go the ledger names.
 
