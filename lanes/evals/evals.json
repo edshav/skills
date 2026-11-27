@@ -24,7 +24,7 @@
       "id": "overlap-checked-at-function-level",
       "_probes": "Preparation, Lanes: overlap at function level; when the changes exist as patches, checked with git apply in plan order and with each pair of lanes swapped",
       "prompt": "Three of the planned lanes all touch <FILE>. Should they be merged into one lane?",
-      "expected_output": "The answer checks which functions of <FILE> each lane edits, not just the file. Lanes editing different functions stay separate once `git apply` of their changes onto the base branch is clean in plan order and with each pair of lanes swapped (or, without patches, the lanes' function lists compared); a function two lanes both edit fixes an order, the later PR rebasing onto the earlier. Merging the lanes because they share a file is a failure."
+      "expected_output": "The answer checks which functions of <FILE> each lane edits, not just the file. Lanes editing different functions stay separate once `git apply` of their changes onto the base branch is clean in plan order and with each pair of lanes swapped (or, without patches, the lanes' function lists compared); a function two lanes both edit fixes an order, the later PR building on the earlier. Merging the lanes because they share a file is a failure."
     },
     {
       "id": "plan-file-out-of-git",
